@@ -19,7 +19,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.LibroFormController"
             prefHeight="750" prefWidth="1150"
-            style="-fx-background-color: white;">
+            style="-fx-background-color: white;"
+            stylesheets="@../css/estilos.css">
 
     <top>
         <StackPane style="-fx-background-color: #3579be;" prefHeight="110">
@@ -143,7 +144,7 @@
 
             <Button fx:id="btnCancelar" text="CANCELAR" prefWidth="200" prefHeight="45"
                     onAction="#handleCancelar"
-                    style="-fx-background-color: #6c757d; -fx-text-fill: white;">
+                    styleClass="boton-cerrar">
                 <font>
                     <Font name="Arial Bold" size="14"/>
                 </font>
@@ -151,7 +152,7 @@
 
             <Button fx:id="btnGuardar" text="GUARDAR CAMBIOS" prefWidth="200" prefHeight="45"
                     onAction="#handleGuardar"
-                    style="-fx-background-color: #28a745; -fx-text-fill: white;">
+                    styleClass="boton-cerrar">
                 <font>
                     <Font name="Arial Bold" size="14"/>
                 </font>

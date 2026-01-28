@@ -5,10 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49ffc60e-8931-44b1-a3ef-7640586ee9cf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/css/estilos.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/DashboardController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/DashboardController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/database/GestorBaseDatos.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/database/GestorBaseDatos.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/view/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/view/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/catalogo.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/catalogo.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/libro_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/libro_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/prestamo_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/prestamo_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/prestamos.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/prestamos.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/sancion_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/sancion_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/sanciones.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/sanciones.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/usuario_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/usuario_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/usuarios.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/usuarios.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -14,8 +14,11 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.DashboardController"
+            stylesheets="@../css/estilos.css"
+            style="-fx-background-color: white;"
             prefHeight="700" prefWidth="1200">
 
     <top>
@@ -38,7 +41,7 @@
 
             <Button fx:id="btnCerrarSesion" text="Cerrar Sesión"
                     onAction="#handleCerrarSesion"
-                    style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 13; -fx-background-radius: 5;"
+                    styleClass="boton-cerrar"
                     prefHeight="35" prefWidth="120"/>
         </HBox>
     </top>
@@ -60,37 +63,37 @@
                     </VBox.margin>
                 </Label>
 
-                <Button fx:id="btnCatalogo" text="📚  Catalogo" alignment="CENTER_LEFT" maxWidth="Infinity"
+                <Button fx:id="btnCatalogo" text="📚  Catalogo"
+                        maxWidth="Infinity" prefHeight="50"
                         onAction="#handleCatalogo"
-                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
-                        prefHeight="50">
+                        styleClass="boton-menu">
                     <padding>
                         <Insets left="10"/>
                     </padding>
                 </Button>
 
-                <Button fx:id="btnUsuarios" text="👥  Usuarios" alignment="CENTER_LEFT" maxWidth="Infinity"
+                <Button fx:id="btnUsuarios" text="👥  Usuarios"
+                        maxWidth="Infinity" prefHeight="50"
                         onAction="#handleUsuarios"
-                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
-                        prefHeight="50">
+                        styleClass="boton-menu">
                     <padding>
                         <Insets left="10"/>
                     </padding>
                 </Button>
 
-                <Button fx:id="btnPrestamos" text="💰  Prestamos" alignment="CENTER_LEFT" maxWidth="Infinity"
+                <Button fx:id="btnPrestamos" text="💰  Prestamos"
+                        maxWidth="Infinity" prefHeight="50"
                         onAction="#handlePrestamos"
-                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
-                        prefHeight="50">
+                        styleClass="boton-menu">
                     <padding>
                         <Insets left="10"/>
                     </padding>
                 </Button>
 
-                <Button fx:id="btnSanciones" text="🔨  Sanciones" alignment="CENTER_LEFT" maxWidth="Infinity"
+                <Button fx:id="btnSanciones" text="🔨  Sanciones"
+                        maxWidth="Infinity" prefHeight="50"
                         onAction="#handleSanciones"
-                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
-                        prefHeight="50">
+                        styleClass="boton-menu">
                     <padding>
                         <Insets left="10"/>
                     </padding>
@@ -114,7 +117,7 @@
                         <!-- Tarjeta azul: Total Títulos -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              style="-fx-background-color: #42A5F5; -fx-background-radius: 10;">
+                              styleClass="card-base, card-azul">
                             <Label fx:id="lblTotalTitulos" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -130,7 +133,7 @@
                         <!-- Tarjeta cyan: Total Ejemplares -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              style="-fx-background-color: #26C6DA; -fx-background-radius: 10;">
+                              styleClass="card-base, card-violeta">
                             <Label fx:id="lblTotalEjemplares" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -146,7 +149,7 @@
                         <!-- Tarjeta verde: Prestamos -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              style="-fx-background-color: #66BB6A; -fx-background-radius: 10;">
+                              styleClass="card-base, card-naranja">
                             <Label fx:id="lblPrestamosTotales" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -165,7 +168,7 @@
                         <!-- Tarjeta rosa: Usuarios -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              style="-fx-background-color: #EC407A; -fx-background-radius: 10;">
+                              styleClass="card-base, card-rojo">
                             <Label fx:id="lblUsuarios" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -181,7 +184,7 @@
                         <!-- Tarjeta roja: Sanciones -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              style="-fx-background-color: #EF5350; -fx-background-radius: 10;">
+                              styleClass="card-base, card-oliva">
                             <Label fx:id="lblSancionesActivas" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -197,7 +200,7 @@
                         <!-- Tarjeta morada: Libro Más Prestado -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              style="-fx-background-color: #AB47BC; -fx-background-radius: 10;">
+                              styleClass="card-base, card-acero">
                             <Label fx:id="lblLibroTop" text="—" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="20"/>

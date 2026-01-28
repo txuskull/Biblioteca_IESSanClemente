@@ -16,7 +16,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.SancionesController"
             prefHeight="750" prefWidth="1150"
-            style="-fx-background-color: white;">
+            style="-fx-background-color: white;"
+            stylesheets="@../css/estilos.css">
 
     <top>
         <StackPane style="-fx-background-color: #3579be;" prefHeight="110">
@@ -37,7 +38,7 @@
             <HBox alignment="CENTER_LEFT" pickOnBounds="false">
                 <Button fx:id="btnVolver" text="Volver"
                         onAction="#handleVolver"
-                        style="-fx-background-color: #2a61a0; -fx-text-fill: white;"/>
+                        styleClass="boton-cerrar"/>
             </HBox>
         </StackPane>
     </top>
@@ -69,11 +70,11 @@
 
             <Button fx:id="btnManual" text="Nueva Sanción Manual"
                     onAction="#handleManual"
-                    style="-fx-background-color: #0275d8; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    styleClass="boton-cerrar"/>
 
             <Button fx:id="btnBorrar" text="Levantar Sancion (Borrar)"
                     onAction="#handleBorrar"
-                    style="-fx-background-color: #0275d8; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    styleClass="boton-cerrar"/>
         </HBox>
     </bottom>
 </BorderPane>

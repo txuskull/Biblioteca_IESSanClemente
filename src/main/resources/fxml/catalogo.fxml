@@ -17,6 +17,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.CatalogoController"
             prefHeight="750" prefWidth="1150"
+            stylesheets="@../css/estilos.css"
             style="-fx-background-color: white;">
 
     <top>
@@ -38,7 +39,7 @@
             <HBox alignment="CENTER_LEFT" pickOnBounds="false">
                 <Button fx:id="btnVolver" text="Volver"
                         onAction="#handleVolver"
-                        style="-fx-background-color: #2a61a0; -fx-text-fill: white;"/>
+                        styleClass="boton-cerrar"/>
             </HBox>
         </StackPane>
     </top>
@@ -76,15 +77,15 @@
 
             <Button fx:id="btnNuevo" text="Nuevo Libro"
                     onAction="#handleNuevo"
-                    style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                    styleClass="boton-cerrar"/>
 
             <Button fx:id="btnEditar" text="Editar Seleccionado"
                     onAction="#handleEditar"
-                    style="-fx-background-color: #ffc107; -fx-text-fill: black;"/>
+                    styleClass="boton-cerrar"/>
 
             <Button fx:id="btnBorrar" text="Borrar Libro"
                     onAction="#handleBorrar"
-                    style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
+                    styleClass="boton-cerrar"/>
         </HBox>
     </bottom>
 </BorderPane>

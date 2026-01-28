@@ -1,0 +1,102 @@
+/* ==================================================================
+   PALETA DE COLORES (IES San Clemente)
+   Azul Acero:   rgb(70, 141, 174)  -> #468DAE
+   Azul Fuerte:  rgb(1, 123, 196)   -> #017BC4 (Principal)
+   Naranja:      rgb(242, 146, 0)   -> #F29200
+   Oliva/Oro:    rgb(142, 128, 1)   -> #8E8001
+   Violeta:      rgb(149, 27, 128)  -> #951B80
+   Verde:        rgb(0, 191, 56)    -> #00BF38 (Añadir)
+   Rojo-Naranja: rgb(244, 121, 27)  -> #F4791B
+   ================================================================== */
+
+/* --- 1. BOTONES DEL MENU LATERAL --- */
+.boton-menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: #424242;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+.boton-menu:hover {
+    /* Usamos tu Azul Acero muy suave para el fondo al pasar el ratón */
+    -fx-background-color: rgba(70, 141, 174, 0.2);
+    -fx-text-fill: #017BC4; /* Tu Azul Fuerte para el texto */
+    -fx-font-weight: bold;
+    -fx-border-color: #017BC4;
+    -fx-border-width: 0 0 0 3; /* Una linea azul a la izquierda */
+}
+
+/* --- 2. BOTONES DE ACCIÓN --- */
+
+/* BOTON AZUL (Cerrar Sesión, Guardar, Aceptar) - Tu Azul Fuerte */
+.boton-azul {
+    -fx-background-color: #017BC4;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+.boton-azul:hover {
+    -fx-background-color: #01629c; /* Un poco mas oscuro */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* BOTON VERDE (Añadir nuevo, Crear) - Tu Verde */
+.boton-verde {
+    -fx-background-color: #00BF38;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+.boton-verde:hover {
+    -fx-background-color: #00992d;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* BOTON ROJO (Solo para Borrar/Eliminar) - Rojo Estandar de Alerta */
+.boton-rojo {
+    -fx-background-color: #D32F2F; /* Rojo estandar para peligro */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+.boton-rojo:hover {
+    -fx-background-color: #B71C1C;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* --- 3. TARJETAS DEL DASHBOARD (Tus colores mezclados) --- */
+.card-base {
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 1);
+}
+
+.card-azul     { -fx-background-color: #017BC4; } /* Azul Fuerte */
+.card-violeta  { -fx-background-color: #951B80; } /* Violeta */
+.card-naranja  { -fx-background-color: #F29200; } /* Naranja */
+.card-rojo     { -fx-background-color: #F4791B; } /* Tu Rojo-Naranja */
+.card-oliva    { -fx-background-color: #8E8001; } /* Oliva/Oro */
+.card-acero    { -fx-background-color: #468DAE; } /* Azul Acero */
+
+/* BOTON CERRAR SESIÓN  */
+.boton-cerrar {
+    -fx-background-color: #468DAE; /* Azul Fuerte  */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+
+/* Al pasar el ratón cambia al otro azul (hover)  */
+.boton-cerrar:hover {
+    -fx-background-color: #017BC4; /* Tu Azul Acero (Resalta) */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 1); /* Sombra más fuerte */
+}
+
+/* Al hacer clic */
+.boton-cerrar:pressed {
+    -fx-background-color: #005a8f; /* Un azul más oscuro */
+}

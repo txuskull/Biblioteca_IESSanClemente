@@ -15,7 +15,9 @@
 
 <HBox prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controller.LoginController">
+      fx:controller="controller.LoginController"
+      style="-fx-background-color: white;"
+      stylesheets="@../css/estilos.css">
 
     <!-- Panel izquierdo azul -->
     <VBox alignment="CENTER" prefWidth="300" style="-fx-background-color: #1976D2;">
@@ -74,7 +76,7 @@
             </VBox.margin>
         </Label>
 
-        <TextField fx:id="txtUsuario" prefHeight="45"
+        <TextField fx:id="txtUsuario" prefHeight="45" promptText="Usuario"
                    style="-fx-background-color: white; -fx-border-color: #B3E5FC; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5; -fx-font-size: 14;">
             <VBox.margin>
                 <Insets top="10" />
@@ -88,15 +90,15 @@
             </VBox.margin>
         </PasswordField>
 
-        <Hyperlink style="-fx-text-fill: #757575; -fx-font-size: 13;" text="Olvidé mi contraseña">
-            <VBox.margin>
-                <Insets top="-15" />
-            </VBox.margin>
-        </Hyperlink>
+<!--        <Hyperlink style="-fx-text-fill: #757575; -fx-font-size: 13;" text="Olvidé mi contraseña">-->
+<!--            <VBox.margin>-->
+<!--                <Insets top="-15" />-->
+<!--            </VBox.margin>-->
+<!--        </Hyperlink>-->
 
         <Button fx:id="btnLogin" maxWidth="Infinity" prefHeight="50"
                 onAction="#handleLogin"
-                style="-fx-background-color: #1976D2; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;"
+                styleClass="boton-cerrar"
                 text="INICIAR SESIÓN">
             <VBox.margin>
                 <Insets top="10" />

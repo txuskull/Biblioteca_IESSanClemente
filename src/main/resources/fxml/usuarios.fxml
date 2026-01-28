@@ -16,6 +16,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.UsuariosController"
             prefHeight="750" prefWidth="1150"
+            stylesheets="@../css/estilos.css"
             style="-fx-background-color: white;">
 
     <top>
@@ -37,7 +38,7 @@
             <HBox alignment="CENTER_LEFT" pickOnBounds="false">
                 <Button fx:id="btnVolver" text="Volver"
                         onAction="#handleVolver"
-                        style="-fx-background-color: #2a61a0; -fx-text-fill: white;"/>
+                        styleClass="boton-cerrar"/>
             </HBox>
         </StackPane>
     </top>
@@ -69,14 +70,15 @@
 
             <Button fx:id="btnNuevo" text="Nuevo Usuario"
                     onAction="#handleNuevo"
-                    style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                    styleClass="boton-verde"/>
 
             <Button fx:id="btnEditar" text="Editar Usuario"
-                    onAction="#handleEditar"/>
+                    onAction="#handleEditar"
+                    styleClass="boton-cerrar"/>
 
             <Button fx:id="btnBorrar" text="Borrar Usuario"
                     onAction="#handleBorrar"
-                    style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
+                    styleClass="boton-rojo"/>
         </HBox>
     </bottom>
 </BorderPane>
