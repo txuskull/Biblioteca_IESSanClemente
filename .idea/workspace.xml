@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/PrestamoFormController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/PrestamoFormController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/PrestamosController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/PrestamosController.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

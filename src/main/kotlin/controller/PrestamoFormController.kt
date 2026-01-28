@@ -104,6 +104,14 @@ class PrestamoFormController {
             }
         }
 
+        // Fechas incorretas
+        if (fechaD.isBefore(fechaP)) {
+            mostrarAlerta("Fecha incorrecta",
+                "La fecha de devolución no puede ser anterior a la fecha de préstamo.",
+                Alert.AlertType.WARNING)
+            return
+        }
+
         // Intentar guardar préstamo
         guardarPrestamo(usuario.id, libro.id, fechaP, fechaD)
     }

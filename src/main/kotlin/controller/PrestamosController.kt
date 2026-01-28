@@ -80,6 +80,8 @@ class PrestamosController {
             alerta.contentText = "Selecciona un préstamo activo."
             alerta.showAndWait()
         }
+
+
     }
 
     private fun cargarPrestamos(): javafx.collections.ObservableList<Prestamo> {
@@ -136,45 +138,110 @@ class PrestamosController {
                     val fechaHoy = LocalDate.now()
                     val fechaPrevista = LocalDate.parse(prestamo.fechaDevolucionPrevista)
 
+                    // VERIFICAR SI HAY RETRASO
                     if (fechaHoy.isAfter(fechaPrevista)) {
                         val diasRetraso = ChronoUnit.DAYS.between(fechaPrevista, fechaHoy)
-                        val diasSancion = diasRetraso * 2
 
-                        val fechaFinSancion = fechaHoy.plusDays(diasSancion)
+                        // Obtener usuario_id y tipo de publicación
+                        val sqlInfo = """
+                        SELECT p.usuario_id, u.tipo as tipo_usuario, l.tipo_publicacion
+                        FROM prestamos p
+                        JOIN usuarios u ON p.usuario_id = u.id
+                        JOIN ejemplares e ON p.ejemplar_id = e.id
+                        JOIN libros l ON e.libro_id = l.id
+                        WHERE p.id = ?
+                    """
+                        val psInfo = conn.prepareStatement(sqlInfo)
+                        psInfo.setInt(1, prestamo.id)
+                        val rsInfo = psInfo.executeQuery()
 
-                        val sqlUserId = "SELECT usuario_id FROM prestamos WHERE id = ?"
-                        val psUser = conn.prepareStatement(sqlUserId)
-                        psUser.setInt(1, prestamo.id)
-                        val rsUser = psUser.executeQuery()
+                        if (rsInfo.next()) {
+                            val userId = rsInfo.getInt("usuario_id")
+                            val tipoUsuario = rsInfo.getString("tipo_usuario")
+                            val tipoPublicacion = rsInfo.getString("tipo_publicacion")
 
-                        if (rsUser.next()) {
-                            val userId = rsUser.getInt("usuario_id")
+                            // SOLO SANCIONAR A ESTUDIANTES (según PDF página 2)
+                            if (tipoUsuario == "ESTUDIANTE") {
+                                // CALCULAR DÍAS DE SANCIÓN SEGÚN TIPO
+                                val diasSancion = if (tipoPublicacion == "REVISTA") {
+                                    // REVISTAS: 10 días FIJOS (PDF página 3)
+                                    10L
+                                } else {
+                                    // LIBROS: 2 × n días (PDF página 3)
+                                    diasRetraso * 2
+                                }
 
-                            val sqlSancion = """
+                                val fechaFinSancion = fechaHoy.plusDays(diasSancion)
+
+                                // Insertar Sanción
+                                val sqlSancion = """
                                 INSERT INTO sanciones (usuario_id, motivo, fecha_inicio, fecha_fin, dias_sancion, estado)
                                 VALUES (?, ?, ?, ?, ?, 'ACTIVA')
                             """
-                            val psSancion = conn.prepareStatement(sqlSancion)
-                            psSancion.setInt(1, userId)
-                            psSancion.setString(2, "Retraso de $diasRetraso dias en '${prestamo.tituloLibro}'")
-                            psSancion.setString(3, fechaHoy.toString())
-                            psSancion.setString(4, fechaFinSancion.toString())
-                            psSancion.setLong(5, diasSancion)
-                            psSancion.executeUpdate()
+                                val psSancion = conn.prepareStatement(sqlSancion)
+                                psSancion.setInt(1, userId)
 
-                            val aviso = Alert(Alert.AlertType.WARNING)
-                            aviso.headerText = "¡Sanción Aplicada!"
-                            aviso.contentText = "El usuario tiene $diasRetraso días de retraso.\nSanción automática: $diasSancion días."
-                            aviso.showAndWait()
+                                val motivo = if (tipoPublicacion == "REVISTA") {
+                                    "No devolvió revista '${prestamo.tituloLibro}' en el plazo de 1 día"
+                                } else {
+                                    "Retraso de $diasRetraso día(s) en '${prestamo.tituloLibro}'"
+                                }
+
+                                psSancion.setString(2, motivo)
+                                psSancion.setString(3, fechaHoy.toString())
+                                psSancion.setString(4, fechaFinSancion.toString())
+                                psSancion.setLong(5, diasSancion)
+                                psSancion.executeUpdate()
+
+                                // Avisar con mensaje diferente según tipo
+                                val aviso = Alert(Alert.AlertType.WARNING)
+                                aviso.headerText = "¡Sanción Aplicada!"
+
+                                if (tipoPublicacion == "REVISTA") {
+                                    aviso.contentText = """
+                                    REVISTA no devuelta a tiempo.
+                                    
+                                    Según el reglamento (PDF pág. 3):
+                                    "En el caso de no devolver una revista en el día, 
+                                    la sanción automática será de diez días."
+                                    
+                                    Sanción: 10 días
+                                    Fin de sanción: $fechaFinSancion
+                                """.trimIndent()
+                                } else {
+                                    aviso.contentText = """
+                                    LIBRO devuelto con retraso.
+                                    
+                                    Días de retraso: $diasRetraso
+                                    Sanción aplicada: $diasSancion días (2 × $diasRetraso)
+                                    Fin de sanción: $fechaFinSancion
+                                """.trimIndent()
+                                }
+
+                                aviso.showAndWait()
+                            } else {
+                                // NO es estudiante, no se sanciona pero informamos del retraso
+                                val info = Alert(Alert.AlertType.INFORMATION)
+                                info.headerText = "Devolución con retraso"
+                                info.contentText = """
+                                El usuario tiene $diasRetraso día(s) de retraso.
+                                
+                                NO se aplica sanción porque el usuario es $tipoUsuario.
+                                (Solo los ESTUDIANTES reciben sanciones automáticas)
+                            """.trimIndent()
+                                info.showAndWait()
+                            }
                         }
                     }
 
+                    // Registrar devolución
                     val sqlUpdate = "UPDATE prestamos SET fecha_devolucion_real = ? WHERE id = ?"
                     val ps = conn.prepareStatement(sqlUpdate)
                     ps.setString(1, fechaHoy.toString())
                     ps.setInt(2, prestamo.id)
                     ps.executeUpdate()
 
+                    // Liberar ejemplar
                     val sqlLiberar = "UPDATE ejemplares SET estado = 'DISPONIBLE' WHERE id = (SELECT ejemplar_id FROM prestamos WHERE id = ?)"
                     val ps2 = conn.prepareStatement(sqlLiberar)
                     ps2.setInt(1, prestamo.id)
@@ -184,6 +251,7 @@ class PrestamosController {
 
                 } catch (e: Exception) {
                     println("Error devolucion: ${e.message}")
+                    e.printStackTrace()
                 }
             }
         }
