@@ -50,20 +50,44 @@ class CatalogoController {
         val colId = tabla.columns[0] as TableColumn<Libro, Int>
         val colIsbn = tabla.columns[1] as TableColumn<Libro, String>
         val colTitulo = tabla.columns[2] as TableColumn<Libro, String>
-        val colTipo = tabla.columns[3] as TableColumn<Libro, String>
-        val colAutor = tabla.columns[4] as TableColumn<Libro, String>
-        val colEditorial = tabla.columns[5] as TableColumn<Libro, String>
+        val colStock = tabla.columns[3] as TableColumn<Libro, String>
+        val colTipo = tabla.columns[4] as TableColumn<Libro, String>
+        val colAutor = tabla.columns[5] as TableColumn<Libro, String>
+        val colEditorial = tabla.columns[6] as TableColumn<Libro, String>
 
         colId.cellValueFactory = PropertyValueFactory("id")
         colIsbn.cellValueFactory = PropertyValueFactory("isbn")
         colTitulo.cellValueFactory = PropertyValueFactory("titulo")
-        colAutor.cellValueFactory = PropertyValueFactory("autor")
-        colEditorial.cellValueFactory = PropertyValueFactory("editorial")
 
-        // Columna TIPO personalizada
+        // Configuramos la columna STOCK
+        colStock.cellValueFactory = PropertyValueFactory("stock")
+
+        // Renderizar en ROJO si no hay stock (0 disponibles)
+        colStock.setCellFactory {
+            object : TableCell<Libro, String>() {
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty || item == null) {
+                        text = null
+                        style = ""
+                    } else {
+                        text = item
+                        // Si empieza por "0/", poner en rojo claro y negrita
+                        if (item.startsWith("0/")) {
+                            style = "-fx-background-color: #ffcccc; -fx-font-weight: bold; -fx-alignment: CENTER;"
+                        } else {
+                            style = "-fx-alignment: CENTER;"
+                        }
+                    }
+                }
+            }
+        }
+
         colTipo.setCellValueFactory { libro ->
             javafx.beans.property.SimpleStringProperty(libro.value.tipoPublicacion.name)
         }
+        colAutor.cellValueFactory = PropertyValueFactory("autor")
+        colEditorial.cellValueFactory = PropertyValueFactory("editorial")
     }
 
     @FXML
@@ -122,18 +146,26 @@ class CatalogoController {
 
         if (conn != null) {
             try {
-                val sql = "SELECT * FROM libros"
+                // SQL MEJORADO: Cuenta ejemplares y disponibles al vuelo
+                val sql = """
+                    SELECT l.*, 
+                           (SELECT COUNT(*) FROM ejemplares e WHERE e.libro_id = l.id) as total_copias,
+                           (SELECT COUNT(*) FROM ejemplares e WHERE e.libro_id = l.id AND e.estado = 'DISPONIBLE') as disponibles
+                    FROM libros l
+                """
                 val stmt = conn.createStatement()
                 val rs = stmt.executeQuery(sql)
 
                 while (rs.next()) {
-                    // Convertir texto a Enum
                     val tipoTexto = rs.getString("tipo_publicacion") ?: "LIBRO"
                     val tipoEnum = try {
                         model.TipoPublicacion.valueOf(tipoTexto)
-                    } catch (e: Exception) {
-                        model.TipoPublicacion.LIBRO
-                    }
+                    } catch (e: Exception) { model.TipoPublicacion.LIBRO }
+
+                    // Calculamos el string de stock: "2/3"
+                    val total = rs.getInt("total_copias")
+                    val disp = rs.getInt("disponibles")
+                    val stockStr = "$disp/$total"
 
                     lista.add(Libro(
                         id = rs.getInt("id"),
@@ -141,7 +173,9 @@ class CatalogoController {
                         titulo = rs.getString("titulo"),
                         tipoPublicacion = tipoEnum,
 
-                        // Campos comunes
+                        // Pasamos el stock calculado
+                        stock = stockStr,
+
                         temas = rs.getString("temas") ?: "Sin temas",
                         editorial = rs.getString("editorial") ?: "Sin editorial",
                         editorialDireccion = rs.getString("editorial_direccion"),
@@ -149,19 +183,14 @@ class CatalogoController {
                         idioma = rs.getString("idioma") ?: "Español",
                         modulosRelacionados = rs.getString("modulos_relacionados"),
                         ciclosRelacionados = rs.getString("ciclos_relacionados"),
-
-                        // Solo libros
                         autor = rs.getString("autor"),
                         nacionalidadAutor = rs.getString("nacionalidad_autor"),
                         edicion = rs.getString("edicion"),
                         fechaPublicacion = rs.getString("fecha_publicacion"),
-
-                        // Solo revistas
                         periodicidad = rs.getString("periodicidad")
                     ))
                 }
                 conn.close()
-                println("✅ Se cargaron ${lista.size} publicaciones en el catálogo")
             } catch (e: Exception) {
                 println("Error cargando libros: ${e.message}")
                 e.printStackTrace()

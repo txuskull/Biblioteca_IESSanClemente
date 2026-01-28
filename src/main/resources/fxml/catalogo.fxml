@@ -60,9 +60,11 @@
                     <TableColumn text="ID" prefWidth="50"/>
                     <TableColumn text="ISBN" prefWidth="120"/>
                     <TableColumn text="Titulo" prefWidth="180"/>
+                    <TableColumn text="Stock" prefWidth="70" style="-fx-alignment: CENTER;"/>
                     <TableColumn text="Tipo" prefWidth="80"/>
                     <TableColumn text="Autor" prefWidth="130"/>
                     <TableColumn text="Editorial" prefWidth="120"/>
+
                 </columns>
             </TableView>
         </VBox>

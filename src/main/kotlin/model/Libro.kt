@@ -27,7 +27,8 @@ data class Libro(
     val fechaPublicacion: String?,
 
     // Solo para REVISTAS
-    val periodicidad: String?
+    val periodicidad: String?,
+    val stock: String = "0/0"
 ) {
     // Para mostrar en ComboBox y listas
     override fun toString(): String {
