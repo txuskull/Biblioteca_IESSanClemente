@@ -95,13 +95,24 @@ class UsuariosController {
             try {
                 val rs = conn.createStatement().executeQuery("SELECT * FROM usuarios")
                 while (rs.next()) {
-                    lista.add(Usuario(
-                        rs.getInt("id"),
-                        rs.getString("dni"),
-                        rs.getString("nombre"),
-                        rs.getString("tipo"),
-                        rs.getString("email") ?: "",
-                        rs.getString("sancionado_hasta") ?: "No"
+                    // 1. Leemos el tipo como texto de la base de datos
+                    val tipoTexto = rs.getString("tipo")
+
+                    // 2. Lo convertimos al Enum (protegemos si viene vacio o mal escrito)
+                    val tipoEnum = try {
+                        model.TipoUsuario.valueOf(tipoTexto)
+                    } catch (e: Exception) {
+                        model.TipoUsuario.ESTUDIANTE // Si falla, ponemos ESTUDIANTE por defecto
+                    }
+
+                    // 3. Creamos el Usuario con los 6 campos exactos del modelo
+                    lista.add(model.Usuario(
+                        rs.getInt("id"),                     // 1. ID
+                        rs.getString("dni"),                 // 2. DNI
+                        rs.getString("nombre"),              // 3. Nombre
+                        tipoEnum,                            // 4. Tipo (Enum)
+                        rs.getString("email") ?: "",         // 5. Email
+                        rs.getString("sancionado_hasta")     // 6. Sancion (puede ser null)
                     ))
                 }
                 conn.close()

@@ -112,6 +112,20 @@ class GestorBaseDatos {
                 ('978-84-567-8901-4', 'Cien Años de Soledad', 'Gabriel Garcia Marquez', 'Sudamericana');
             """)
 
+            // Insertar más usuarios de ejemplo
+            // AÑADIDO: Un PROFESOR para poder probar las reglas especiales del PDF
+            stmt.execute("""
+                INSERT OR IGNORE INTO usuarios (dni, nombre, tipo, email) VALUES
+                ('12345678A', 'Jesus Lopez Gonzalez', 'ESTUDIANTE', 'jesus.lopez@sanclemente.com'),
+                ('11111111C', 'Pedro Sanchez Ruiz', 'ESTUDIANTE', 'pedro.sanchez@sanclemente.com'),
+                ('22222222D', 'Ana Martinez Lopez', 'ESTUDIANTE', 'ana.martinez@sanclemente.com'),
+                ('33333333E', 'Carlos Rodriguez Vega', 'ESTUDIANTE', 'carlos.rodriguez@sanclemente.com'),
+                ('99999999P', 'Lozana Docente', 'PROFESOR', 'lozana.profe@sanclemente.com'); 
+                ('99999999P', 'Cayetano Docente', 'PROFESOR', 'cayetano.profe@sanclemente.com'); 
+                ('99999999P', 'Josefa Docente', 'PROFESOR', 'josefa.profe@sanclemente.com'); 
+                ('55555555X', 'Luis Conserje', 'CONSERJE', 'luis.conserje@sanclemente.com');
+            """)
+
             conn.close()
             println("✅ Sistema de Base de Datos inicializado correctamente.")
         } catch (e: Exception) {

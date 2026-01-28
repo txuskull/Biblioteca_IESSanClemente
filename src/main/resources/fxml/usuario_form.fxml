@@ -20,7 +20,7 @@
             fx:controller="controller.UsuarioFormController"
             prefHeight="750" prefWidth="1150"
             style="-fx-background-color: white;"
-            styleClass="boton-cerrar">
+            stylesheets="@../css/estilos.css">
 
     <top>
         <StackPane style="-fx-background-color: #3579be;" prefHeight="110">

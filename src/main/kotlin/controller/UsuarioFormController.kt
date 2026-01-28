@@ -23,7 +23,10 @@ class UsuarioFormController {
 
     @FXML
     fun initialize() {
-        cmbTipo.items.addAll("ESTUDIANTE", "PROFESOR")
+        // Borramos la lista manual y usamos la del Enum automatica
+        // Esto coge todos los valores que pusimos en TipoUsuario.kt y los convierte a texto
+        cmbTipo.items.addAll(model.TipoUsuario.values().map { it.name })
+
         cmbTipo.selectionModel.selectFirst()
     }
 
@@ -32,10 +35,13 @@ class UsuarioFormController {
         lblTitulo.text = "Editar Usuario"
 
         txtDni.text = usuario.dni
-        txtDni.isDisable = true
+        txtDni.isDisable = true // El DNI no se debe poder cambiar nunca
         txtNombre.text = usuario.nombre
         txtEmail.text = usuario.email
-        cmbTipo.value = usuario.tipo
+
+        // Usamos .name para convertir el Enum a String
+        cmbTipo.value = usuario.tipo.name
+
         txtPassword.promptText = "Dejar vacio para mantener la actual"
     }
 
