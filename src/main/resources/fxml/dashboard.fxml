@@ -98,8 +98,8 @@
             </VBox>
 
             <!-- Contenedor principal con scroll vertical.
-     fitToWidth=true hace que el contenido se ajuste al ancho -->
-            <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5;">
+            fitToWidth=true hace que el contenido se ajuste al ancho -->
+            <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5;" HBox.hgrow="ALWAYS">
 
                 <!-- Contenedor vertical principal de todo el dashboard -->
                 <VBox spacing="30">
@@ -109,59 +109,68 @@
                         <Insets top="20" right="20" bottom="30" left="20"/>
                     </padding>
 
-                    <!-- FILA SUPERIOR: tarjetas de resumen (estadísticas rápidas) -->
-                    <HBox spacing="20" alignment="CENTER_LEFT">
-
-                        <!-- Tarjeta: Total de libros -->
-                        <VBox alignment="CENTER" spacing="30" prefWidth="220" prefHeight="120"
+                    <!-- FILA 1: 3 tarjetas -->
+                    <HBox spacing="20">
+                        <!-- Tarjeta azul: Total Títulos -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
+                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               style="-fx-background-color: #42A5F5; -fx-background-radius: 10;">
-
-                            <!-- Número total de libros -->
-                            <Label fx:id="lblTotalLibros" text="6" textFill="WHITE">
+                            <Label fx:id="lblTotalTitulos" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
-
-                            <!-- Texto descriptivo -->
-                            <Label text="Total Libros" textFill="WHITE">
+                            <Label text="Títulos de Libros" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
                                 </font>
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta: préstamos totales -->
-                        <VBox alignment="CENTER" spacing="10" prefWidth="220" prefHeight="120"
+                        <!-- Tarjeta cyan: Total Ejemplares -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
+                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                              style="-fx-background-color: #26C6DA; -fx-background-radius: 10;">
+                            <Label fx:id="lblTotalEjemplares" text="0" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="48"/>
+                                </font>
+                            </Label>
+                            <Label text="Total Ejemplares" textFill="WHITE">
+                                <font>
+                                    <Font name="System" size="16"/>
+                                </font>
+                            </Label>
+                        </VBox>
+
+                        <!-- Tarjeta verde: Prestamos -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
+                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               style="-fx-background-color: #66BB6A; -fx-background-radius: 10;">
-
-                            <!-- Número total de préstamos -->
-                            <Label fx:id="lblPrestamosTotales" text="10" textFill="WHITE">
+                            <Label fx:id="lblPrestamosTotales" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
-
-                            <!-- Texto descriptivo -->
-                            <Label text="Prestamos Totales" textFill="WHITE">
+                            <Label text="Préstamos Totales" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
                                 </font>
                             </Label>
                         </VBox>
+                    </HBox>
 
-                        <!-- Tarjeta: número de usuarios -->
-                        <VBox alignment="CENTER" spacing="10" prefWidth="220" prefHeight="120"
+                    <!-- FILA 2: 3 tarjetas -->
+                    <HBox spacing="20">
+                        <!-- Tarjeta rosa: Usuarios -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
+                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               style="-fx-background-color: #EC407A; -fx-background-radius: 10;">
-
-                            <!-- Número de usuarios registrados -->
-                            <Label fx:id="lblUsuarios" text="5" textFill="WHITE">
+                            <Label fx:id="lblUsuarios" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
-
-                            <!-- Texto descriptivo -->
                             <Label text="Usuarios" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
@@ -169,19 +178,32 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta: sanciones activas -->
-                        <VBox alignment="CENTER" spacing="10" prefWidth="220" prefHeight="120"
+                        <!-- Tarjeta roja: Sanciones -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
+                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               style="-fx-background-color: #EF5350; -fx-background-radius: 10;">
-
-                            <!-- Número de sanciones activas -->
-                            <Label fx:id="lblSancionesActivas" text="2" textFill="WHITE">
+                            <Label fx:id="lblSancionesActivas" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
-
-                            <!-- Texto descriptivo -->
                             <Label text="Sanciones Activas" textFill="WHITE">
+                                <font>
+                                    <Font name="System" size="16"/>
+                                </font>
+                            </Label>
+                        </VBox>
+
+                        <!-- Tarjeta morada: Libro Más Prestado -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
+                              HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                              style="-fx-background-color: #AB47BC; -fx-background-radius: 10;">
+                            <Label fx:id="lblLibroTop" text="—" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="20"/>
+                                </font>
+                            </Label>
+                            <Label text="Libro Más Prestado" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
                                 </font>

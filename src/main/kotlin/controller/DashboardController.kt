@@ -19,10 +19,13 @@ class DashboardController {
     @FXML private lateinit var btnPrestamos: Button
     @FXML private lateinit var btnSanciones: Button
 
-    @FXML private lateinit var lblTotalLibros: Label
+    // NUEVAS TARJETAS
+    @FXML private lateinit var lblTotalTitulos: Label
+    @FXML private lateinit var lblTotalEjemplares: Label
     @FXML private lateinit var lblPrestamosTotales: Label
     @FXML private lateinit var lblUsuarios: Label
     @FXML private lateinit var lblSancionesActivas: Label
+    @FXML private lateinit var lblLibroTop: Label
 
     @FXML private lateinit var pieChartDisponibilidad: PieChart
     @FXML private lateinit var barChartTop5: BarChart<String, Number>
@@ -80,9 +83,13 @@ class DashboardController {
 
         if (conn != null) {
             try {
-                // Total de libros
+                // Total de TÍTULOS (libros únicos)
                 var rs = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM libros")
-                if (rs.next()) lblTotalLibros.text = rs.getInt("total").toString()
+                if (rs.next()) lblTotalTitulos.text = rs.getInt("total").toString()
+
+                // Total de EJEMPLARES (copias físicas)
+                rs = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM ejemplares")
+                if (rs.next()) lblTotalEjemplares.text = rs.getInt("total").toString()
 
                 // Préstamos totales
                 rs = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM prestamos")
@@ -95,6 +102,28 @@ class DashboardController {
                 // Sanciones activas
                 rs = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM sanciones WHERE estado = 'ACTIVA'")
                 if (rs.next()) lblSancionesActivas.text = rs.getInt("total").toString()
+
+                // Libro MÁS PRESTADO
+                val sqlTop = """
+                    SELECT l.titulo, COUNT(p.id) as total
+                    FROM prestamos p
+                    JOIN ejemplares e ON p.ejemplar_id = e.id
+                    JOIN libros l ON e.libro_id = l.id
+                    GROUP BY l.id, l.titulo
+                    ORDER BY total DESC
+                    LIMIT 1
+                """
+                rs = conn.createStatement().executeQuery(sqlTop)
+                if (rs.next()) {
+                    val titulo = rs.getString("titulo")
+                    val tituloCorto = if (titulo.length > 25)
+                        titulo.substring(0, 22) + "..."
+                    else
+                        titulo
+                    lblLibroTop.text = tituloCorto
+                } else {
+                    lblLibroTop.text = "Sin datos"
+                }
 
                 conn.close()
             } catch (e: Exception) {
