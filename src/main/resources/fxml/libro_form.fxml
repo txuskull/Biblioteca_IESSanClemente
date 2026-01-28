@@ -42,7 +42,7 @@
 
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-            <GridPane hgap="20" vgap="20" alignment="TOP_CENTER">
+            <GridPane fx:id="gridForm" hgap="20" vgap="20" alignment="TOP_CENTER">
                 <padding>
                     <Insets top="50" right="50" bottom="50" left="50"/>
                 </padding>
@@ -52,85 +52,128 @@
                     <ColumnConstraints/>
                 </columnConstraints>
 
+                <!-- Fila 0: ISBN -->
                 <Label text="ISBN / Codigo:" GridPane.columnIndex="0" GridPane.rowIndex="0"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
                 <TextField fx:id="txtIsbn" GridPane.columnIndex="1" GridPane.rowIndex="0"
                            prefWidth="400" prefHeight="40"/>
 
+                <!-- Fila 1: Titulo -->
                 <Label text="Titulo:" GridPane.columnIndex="0" GridPane.rowIndex="1"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
                 <TextField fx:id="txtTitulo" GridPane.columnIndex="1" GridPane.rowIndex="1"
                            prefWidth="400" prefHeight="40"/>
 
+                <!-- Fila 2: Tipo -->
                 <Label text="Tipo:" GridPane.columnIndex="0" GridPane.rowIndex="2"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
                 <ComboBox fx:id="cmbTipo" GridPane.columnIndex="1" GridPane.rowIndex="2"
                           prefWidth="400" prefHeight="40" promptText="Seleccionar tipo"/>
 
-                <Label text="Autor:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                <!-- CAMPOS ESPECÍFICOS EN LA MISMA FILA 3 -->
+
+                <!-- SOLO LIBROS: Autor -->
+                <Label fx:id="lblAutor" text="Autor:" GridPane.columnIndex="0" GridPane.rowIndex="3"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
                 <TextField fx:id="txtAutor" GridPane.columnIndex="1" GridPane.rowIndex="3"
                            prefWidth="400" prefHeight="40"/>
 
-                <Label text="Nacionalidad Autor:" GridPane.columnIndex="0" GridPane.rowIndex="4"
+                <!-- SOLO REVISTAS: Periodicidad (MISMA FILA 3) -->
+                <Label fx:id="lblPeriodicidad" text="Periodicidad:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                       style="-fx-text-fill: #555;" visible="false" managed="false">
+                    <font><Font name="Arial Bold" size="14"/></font>
+                </Label>
+                <ComboBox fx:id="cmbPeriodicidad" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                          prefWidth="400" prefHeight="40" visible="false" managed="false"/>
+
+                <!-- Fila 4: Nacionalidad (SOLO LIBROS) -->
+                <Label fx:id="lblNacionalidad" text="Nacionalidad Autor:" GridPane.columnIndex="0" GridPane.rowIndex="4"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
                 <TextField fx:id="txtNacionalidad" GridPane.columnIndex="1" GridPane.rowIndex="4"
                            prefWidth="400" prefHeight="40"/>
 
-                <Label text="Editorial:" GridPane.columnIndex="0" GridPane.rowIndex="5"
+                <!-- Fila 5: Edición (SOLO LIBROS) -->
+                <Label fx:id="lblEdicion" text="Edición:" GridPane.columnIndex="0" GridPane.rowIndex="5"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
-                <TextField fx:id="txtEditorial" GridPane.columnIndex="1" GridPane.rowIndex="5"
+                <TextField fx:id="txtEdicion" GridPane.columnIndex="1" GridPane.rowIndex="5"
                            prefWidth="400" prefHeight="40"/>
 
-                <Label text="Direccion Edit.:" GridPane.columnIndex="0" GridPane.rowIndex="6"
+                <!-- Fila 6: Fecha Publicación (SOLO LIBROS) -->
+                <Label fx:id="lblFechaPublicacion" text="Fecha Publicación:" GridPane.columnIndex="0" GridPane.rowIndex="6"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
-                <TextField fx:id="txtEditorialDir" GridPane.columnIndex="1" GridPane.rowIndex="6"
+                <TextField fx:id="txtFechaPublicacion" GridPane.columnIndex="1" GridPane.rowIndex="6"
+                           prefWidth="400" prefHeight="40" promptText="YYYY-MM-DD"/>
+
+                <!-- CAMPOS COMUNES DESDE FILA 7 -->
+
+                <!-- Fila 7: Editorial -->
+                <Label text="Editorial:" GridPane.columnIndex="0" GridPane.rowIndex="7"
+                       style="-fx-text-fill: #555;">
+                    <font><Font name="Arial Bold" size="14"/></font>
+                </Label>
+                <TextField fx:id="txtEditorial" GridPane.columnIndex="1" GridPane.rowIndex="7"
                            prefWidth="400" prefHeight="40"/>
 
-                <Label text="Telefono Edit.:" GridPane.columnIndex="0" GridPane.rowIndex="7"
+                <!-- Fila 8: Dirección -->
+                <Label text="Direccion Edit.:" GridPane.columnIndex="0" GridPane.rowIndex="8"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
-                <TextField fx:id="txtEditorialTel" GridPane.columnIndex="1" GridPane.rowIndex="7"
+                <TextField fx:id="txtEditorialDir" GridPane.columnIndex="1" GridPane.rowIndex="8"
                            prefWidth="400" prefHeight="40"/>
 
-                <Label text="Temas / Materias:" GridPane.columnIndex="0" GridPane.rowIndex="8"
+                <!-- Fila 9: Teléfono -->
+                <Label text="Telefono Edit.:" GridPane.columnIndex="0" GridPane.rowIndex="9"
                        style="-fx-text-fill: #555;">
-                    <font>
-                        <Font name="Arial Bold" size="14"/>
-                    </font>
+                    <font><Font name="Arial Bold" size="14"/></font>
                 </Label>
-                <TextArea fx:id="txtTemas" GridPane.columnIndex="1" GridPane.rowIndex="8"
+                <TextField fx:id="txtEditorialTel" GridPane.columnIndex="1" GridPane.rowIndex="9"
+                           prefWidth="400" prefHeight="40"/>
+
+                <!-- Fila 10: Idioma -->
+                <Label text="Idioma:" GridPane.columnIndex="0" GridPane.rowIndex="10"
+                       style="-fx-text-fill: #555;">
+                    <font><Font name="Arial Bold" size="14"/></font>
+                </Label>
+                <ComboBox fx:id="cmbIdioma" GridPane.columnIndex="1" GridPane.rowIndex="10"
+                          prefWidth="400" prefHeight="40"/>
+
+                <!-- Fila 11: Módulos -->
+                <Label text="Módulos:" GridPane.columnIndex="0" GridPane.rowIndex="11"
+                       style="-fx-text-fill: #555;">
+                    <font><Font name="Arial Bold" size="14"/></font>
+                </Label>
+                <TextField fx:id="txtModulos" GridPane.columnIndex="1" GridPane.rowIndex="11"
+                           prefWidth="400" prefHeight="40" promptText="Ej: Programación, DI"/>
+
+                <!-- Fila 12: Ciclos -->
+                <Label text="Ciclos:" GridPane.columnIndex="0" GridPane.rowIndex="12"
+                       style="-fx-text-fill: #555;">
+                    <font><Font name="Arial Bold" size="14"/></font>
+                </Label>
+                <TextField fx:id="txtCiclos" GridPane.columnIndex="1" GridPane.rowIndex="12"
+                           prefWidth="400" prefHeight="40" promptText="Ej: DAM, DAW, ASIR"/>
+
+                <!-- Fila 13: Temas -->
+                <Label text="Temas:" GridPane.columnIndex="0" GridPane.rowIndex="13"
+                       style="-fx-text-fill: #555;">
+                    <font><Font name="Arial Bold" size="14"/></font>
+                </Label>
+                <TextArea fx:id="txtTemas" GridPane.columnIndex="1" GridPane.rowIndex="13"
                           prefWidth="400" prefHeight="80" wrapText="true"/>
             </GridPane>
         </ScrollPane>

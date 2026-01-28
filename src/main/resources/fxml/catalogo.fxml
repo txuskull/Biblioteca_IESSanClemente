@@ -59,10 +59,10 @@
                 <columns>
                     <TableColumn text="ID" prefWidth="50"/>
                     <TableColumn text="ISBN" prefWidth="120"/>
-                    <TableColumn text="Titulo" prefWidth="200"/>
-                    <TableColumn text="Autor" prefWidth="150"/>
-                    <TableColumn text="Editorial" prefWidth="150"/>
-                    <TableColumn text="Estado" prefWidth="100"/>
+                    <TableColumn text="Titulo" prefWidth="180"/>
+                    <TableColumn text="Tipo" prefWidth="80"/>
+                    <TableColumn text="Autor" prefWidth="130"/>
+                    <TableColumn text="Editorial" prefWidth="120"/>
                 </columns>
             </TableView>
         </VBox>

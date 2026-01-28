@@ -29,20 +29,35 @@ class GestorBaseDatos {
                 sancionado_hasta TEXT DEFAULT NULL
             );
         """
+
+        // TABLA LIBROS ACTUALIZADA SEGUN PDF (página 2)
         val sqlLibros = """
             CREATE TABLE IF NOT EXISTS libros (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                isbn TEXT,
+                isbn TEXT UNIQUE,
                 titulo TEXT,
-                autor TEXT,
-                nacionalidad_autor TEXT,
+                tipo_publicacion TEXT,
+                
+                -- Campos comunes para LIBROS y REVISTAS
+                temas TEXT,
                 editorial TEXT,
                 editorial_direccion TEXT,
                 editorial_telefono TEXT,
-                temas TEXT,
-                tipo_publicacion TEXT
+                idioma TEXT DEFAULT 'Español',
+                modulos_relacionados TEXT,
+                ciclos_relacionados TEXT,
+                
+                -- Campos SOLO para LIBROS
+                autor TEXT,
+                nacionalidad_autor TEXT,
+                edicion TEXT,
+                fecha_publicacion TEXT,
+                
+                -- Campos SOLO para REVISTAS
+                periodicidad TEXT
             );
         """
+
         val sqlEjemplares = """
             CREATE TABLE IF NOT EXISTS ejemplares (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,6 +68,7 @@ class GestorBaseDatos {
                 FOREIGN KEY(libro_id) REFERENCES libros(id) ON DELETE CASCADE
             );
         """
+
         val sqlPrestamos = """
             CREATE TABLE IF NOT EXISTS prestamos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,6 +81,7 @@ class GestorBaseDatos {
                 FOREIGN KEY(ejemplar_id) REFERENCES ejemplares(id)
             );
         """
+
         val sqlSanciones = """
             CREATE TABLE IF NOT EXISTS sanciones (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -87,43 +104,45 @@ class GestorBaseDatos {
             stmt.execute(sqlPrestamos)
             stmt.execute(sqlSanciones)
 
-            // Crear admin y datos de ejemplo si no existen
+            // Crear admin
             stmt.execute("""
                 INSERT OR IGNORE INTO usuarios (dni, nombre, password, tipo, email) 
                 VALUES ('admin', 'Administrador Principal', '1234', 'CONSERJE', 'admin@ies.es');
             """)
 
-            // Insertar más usuarios de ejemplo
-            stmt.execute("""
-                INSERT OR IGNORE INTO usuarios (dni, nombre, tipo, email) VALUES
-                ('12345678A', 'Jesus Lopez Garcia', 'ESTUDIANTE', 'jesus.lopez@sanclemente.com'),
-                ('11111111C', 'Pedro Sanchez Ruiz', 'ESTUDIANTE', 'pedro.sanchez@sanclemente.com'),
-                ('22222222D', 'Ana Martinez Lopez', 'ESTUDIANTE', 'ana.martinez@sanclemente.com'),
-                ('33333333E', 'Carlos Rodriguez Vega', 'ESTUDIANTE', 'carlos.rodriguez@sanclemente.com');
-            """)
-
-            // Insertar libros de ejemplo
-            stmt.execute("""
-                INSERT OR IGNORE INTO libros (isbn, titulo, autor, editorial) VALUES
-                ('978-84-123-4567-0', 'Don Quijote de la Mancha', 'Miguel de Cervantes', 'Alfaguara'),
-                ('978-84-456-7890-1', 'Kotlin for Beginners', 'JetBrains Team', 'OReilly'),
-                ('978-84-789-0123-2', 'Principios de Diseño de Interfaces', 'IES San Clemente', 'Autoedicion'),
-                ('978-84-234-5678-3', 'Clean Code', 'Robert C. Martin', 'Prentice Hall'),
-                ('978-84-567-8901-4', 'Cien Años de Soledad', 'Gabriel Garcia Marquez', 'Sudamericana');
-            """)
-
-            // Insertar más usuarios de ejemplo
-            // AÑADIDO: Un PROFESOR para poder probar las reglas especiales del PDF
+            // Insertar usuarios de ejemplo (ESTUDIANTES, PROFESORES, CONSERJE)
             stmt.execute("""
                 INSERT OR IGNORE INTO usuarios (dni, nombre, tipo, email) VALUES
                 ('12345678A', 'Jesus Lopez Gonzalez', 'ESTUDIANTE', 'jesus.lopez@sanclemente.com'),
                 ('11111111C', 'Pedro Sanchez Ruiz', 'ESTUDIANTE', 'pedro.sanchez@sanclemente.com'),
                 ('22222222D', 'Ana Martinez Lopez', 'ESTUDIANTE', 'ana.martinez@sanclemente.com'),
                 ('33333333E', 'Carlos Rodriguez Vega', 'ESTUDIANTE', 'carlos.rodriguez@sanclemente.com'),
-                ('99999999P', 'Lozana Docente', 'PROFESOR', 'lozana.profe@sanclemente.com'); 
-                ('99999999P', 'Cayetano Docente', 'PROFESOR', 'cayetano.profe@sanclemente.com'); 
-                ('99999999P', 'Josefa Docente', 'PROFESOR', 'josefa.profe@sanclemente.com'); 
-                ('55555555X', 'Luis Conserje', 'CONSERJE', 'luis.conserje@sanclemente.com');
+                ('44444444P', 'Lozana Docente', 'PROFESOR', 'lozana.profe@sanclemente.com'),
+                ('55555555P', 'Cayetano Docente', 'PROFESOR', 'cayetano.profe@sanclemente.com'),
+                ('66666666P', 'Josefa Docente', 'PROFESOR', 'josefa.profe@sanclemente.com'),
+                ('77777777X', 'Luis Conserje', 'CONSERJE', 'luis.conserje@sanclemente.com');
+            """)
+
+            // Insertar LIBROS de ejemplo (tipo_publicacion = 'LIBRO')
+            stmt.execute("""
+                INSERT OR IGNORE INTO libros 
+                (isbn, titulo, tipo_publicacion, autor, nacionalidad_autor, editorial, idioma, edicion, temas, modulos_relacionados, ciclos_relacionados) 
+                VALUES
+                ('978-84-123-4567-0', 'Don Quijote de la Mancha', 'LIBRO', 'Miguel de Cervantes', 'Español', 'Alfaguara', 'Español', '1ª Edicion', 'Literatura Clásica', 'Lengua y Literatura', 'Todos'),
+                ('978-84-456-7890-1', 'Kotlin for Beginners', 'LIBRO', 'JetBrains Team', 'Internacional', 'OReilly', 'Inglés', '1ª Edicion', 'Programación', 'Programación', 'DAM, DAW'),
+                ('978-84-789-0123-2', 'Principios de Diseño de Interfaces', 'LIBRO', 'IES San Clemente', 'Español', 'Autoedicion', 'Español', '1ª Edicion', 'Desarrollo de Interfaces', 'DI', 'DAM'),
+                ('978-84-234-5678-3', 'Clean Code', 'LIBRO', 'Robert C. Martin', 'Estadounidense', 'Prentice Hall', 'Inglés', '1ª Edicion', 'Buenas Prácticas', 'Programación', 'DAM, DAW'),
+                ('978-84-567-8901-4', 'Cien Años de Soledad', 'LIBRO', 'Gabriel Garcia Marquez', 'Colombiano', 'Sudamericana', 'Español', '1ª Edicion', 'Literatura', 'Lengua', 'Todos');
+            """)
+
+            // Insertar REVISTAS de ejemplo (tipo_publicacion = 'REVISTA')
+            stmt.execute("""
+                INSERT OR IGNORE INTO libros 
+                (isbn, titulo, tipo_publicacion, editorial, idioma, periodicidad, temas, modulos_relacionados, ciclos_relacionados) 
+                VALUES
+                ('REV-001', 'Clean Code Magazine', 'REVISTA', 'Tech Publishers', 'Inglés', 'Mensual', 'Programación', 'Programación', 'DAM, DAW'),
+                ('REV-002', 'National Geographic España', 'REVISTA', 'RBA', 'Español', 'Mensual', 'Ciencia y Naturaleza', 'Ciencias', 'Todos'),
+                ('REV-003', 'Linux Magazine', 'REVISTA', 'Linux New Media', 'Inglés', 'Mensual', 'Sistemas Operativos', 'SXE', 'ASIR, DAM');
             """)
 
             conn.close()

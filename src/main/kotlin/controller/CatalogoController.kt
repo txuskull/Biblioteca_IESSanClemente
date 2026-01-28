@@ -38,29 +38,32 @@ class CatalogoController {
                 else {
                     val lower = nuevoTexto.lowercase()
                     libro.titulo.lowercase().contains(lower) ||
-                            libro.autor.lowercase().contains(lower) ||
-                            libro.isbn.lowercase().contains(lower)
+                            (libro.autor?.lowercase()?.contains(lower) ?: false) ||
+                            libro.isbn.lowercase().contains(lower) ||
+                            libro.editorial.lowercase().contains(lower)
                 }
             }
         }
     }
 
     private fun configurarColumnas() {
-        // Obtener las columnas de la tabla
         val colId = tabla.columns[0] as TableColumn<Libro, Int>
         val colIsbn = tabla.columns[1] as TableColumn<Libro, String>
         val colTitulo = tabla.columns[2] as TableColumn<Libro, String>
-        val colAutor = tabla.columns[3] as TableColumn<Libro, String>
-        val colEditorial = tabla.columns[4] as TableColumn<Libro, String>
-        val colEstado = tabla.columns[5] as TableColumn<Libro, String>
+        val colTipo = tabla.columns[3] as TableColumn<Libro, String>
+        val colAutor = tabla.columns[4] as TableColumn<Libro, String>
+        val colEditorial = tabla.columns[5] as TableColumn<Libro, String>
 
-        // Vincular columnas con propiedades del modelo
         colId.cellValueFactory = PropertyValueFactory("id")
         colIsbn.cellValueFactory = PropertyValueFactory("isbn")
         colTitulo.cellValueFactory = PropertyValueFactory("titulo")
         colAutor.cellValueFactory = PropertyValueFactory("autor")
         colEditorial.cellValueFactory = PropertyValueFactory("editorial")
-        colEstado.cellValueFactory = PropertyValueFactory("estado")
+
+        // Columna TIPO personalizada
+        colTipo.setCellValueFactory { libro ->
+            javafx.beans.property.SimpleStringProperty(libro.value.tipoPublicacion.name)
+        }
     }
 
     @FXML
@@ -124,19 +127,44 @@ class CatalogoController {
                 val rs = stmt.executeQuery(sql)
 
                 while (rs.next()) {
+                    // Convertir texto a Enum
+                    val tipoTexto = rs.getString("tipo_publicacion") ?: "LIBRO"
+                    val tipoEnum = try {
+                        model.TipoPublicacion.valueOf(tipoTexto)
+                    } catch (e: Exception) {
+                        model.TipoPublicacion.LIBRO
+                    }
+
                     lista.add(Libro(
-                        rs.getInt("id"),
-                        rs.getString("isbn") ?: "Sin ISBN",
-                        rs.getString("titulo"),
-                        rs.getString("autor"),
-                        rs.getString("editorial") ?: "",
-                        "Disponible"
+                        id = rs.getInt("id"),
+                        isbn = rs.getString("isbn") ?: "Sin ISBN",
+                        titulo = rs.getString("titulo"),
+                        tipoPublicacion = tipoEnum,
+
+                        // Campos comunes
+                        temas = rs.getString("temas") ?: "Sin temas",
+                        editorial = rs.getString("editorial") ?: "Sin editorial",
+                        editorialDireccion = rs.getString("editorial_direccion"),
+                        editorialTelefono = rs.getString("editorial_telefono"),
+                        idioma = rs.getString("idioma") ?: "Español",
+                        modulosRelacionados = rs.getString("modulos_relacionados"),
+                        ciclosRelacionados = rs.getString("ciclos_relacionados"),
+
+                        // Solo libros
+                        autor = rs.getString("autor"),
+                        nacionalidadAutor = rs.getString("nacionalidad_autor"),
+                        edicion = rs.getString("edicion"),
+                        fechaPublicacion = rs.getString("fecha_publicacion"),
+
+                        // Solo revistas
+                        periodicidad = rs.getString("periodicidad")
                     ))
                 }
                 conn.close()
-                println("✅ Se cargaron ${lista.size} libros en el catálogo")
+                println("✅ Se cargaron ${lista.size} publicaciones en el catálogo")
             } catch (e: Exception) {
                 println("Error cargando libros: ${e.message}")
+                e.printStackTrace()
             }
         }
         return lista

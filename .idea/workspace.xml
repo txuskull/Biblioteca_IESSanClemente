@@ -6,12 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="49ffc60e-8931-44b1-a3ef-7640586ee9cf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/UsuarioFormController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/UsuarioFormController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/UsuariosController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/UsuariosController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/CatalogoController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/CatalogoController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/LibroFormController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/LibroFormController.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/database/GestorBaseDatos.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/database/GestorBaseDatos.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/model/Usuario.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/model/Usuario.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/usuario_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/usuario_form.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/model/Libro.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/model/Libro.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/catalogo.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/catalogo.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/libro_form.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/libro_form.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
