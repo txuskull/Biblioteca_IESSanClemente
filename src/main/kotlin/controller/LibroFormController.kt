@@ -254,21 +254,40 @@ class LibroFormController {
 
     private fun generarEjemplaresParaPublicacion(conn: java.sql.Connection, idLibro: Int, tipo: String) {
         try {
-            val sqlInsert = "INSERT INTO ejemplares (libro_id, codigo_ejemplar, fecha_adquisicion, estado) VALUES (?, ?, ?, 'DISPONIBLE')"
-            val ps = conn.prepareStatement(sqlInsert)
+            if (tipo == "LIBRO") {
+                // LIBROS: crear 3 ejemplares
+                val sqlInsert = """
+                INSERT INTO ejemplares (libro_id, codigo_ejemplar, numero_revista, fecha_adquisicion, estado) 
+                VALUES (?, ?, ?, ?, 'DISPONIBLE')
+            """
+                val ps = conn.prepareStatement(sqlInsert)
 
-            // Para LIBROS: crear 3 ejemplares
-            // Para REVISTAS: crear 1 solo ejemplar
-            val numEjemplares = if (tipo == "LIBRO") 3 else 1
+                for (i in 1..3) {
+                    ps.setInt(1, idLibro)
+                    ps.setString(2, "AUTO-$idLibro-$i")
+                    ps.setNull(3, java.sql.Types.INTEGER) // numero_revista = NULL para libros
+                    ps.setString(4, java.time.LocalDate.now().toString())
+                    ps.executeUpdate()
+                }
 
-            for (i in 1..numEjemplares) {
+                println("✅ Se crearon 3 ejemplares para el libro ID: $idLibro")
+            } else {
+                // REVISTAS: crear 1 ejemplar con número 1
+                // (El usuario puede añadir más números manualmente después)
+                val sqlInsert = """
+                INSERT INTO ejemplares (libro_id, codigo_ejemplar, numero_revista, fecha_adquisicion, estado) 
+                VALUES (?, ?, ?, ?, 'DISPONIBLE')
+            """
+                val ps = conn.prepareStatement(sqlInsert)
+
                 ps.setInt(1, idLibro)
-                ps.setString(2, "AUTO-$idLibro-$i")
-                ps.setString(3, java.time.LocalDate.now().toString())
+                ps.setString(2, "REV-$idLibro-1")
+                ps.setInt(3, 1) // Empieza con número 1
+                ps.setString(4, java.time.LocalDate.now().toString())
                 ps.executeUpdate()
-            }
 
-            println("✅ Se crearon $numEjemplares ejemplar(es) para la publicación ID: $idLibro")
+                println("✅ Se creó 1 ejemplar (Nº 1) para la revista ID: $idLibro")
+            }
         } catch (e: Exception) {
             println("Error creando ejemplares: ${e.message}")
         }

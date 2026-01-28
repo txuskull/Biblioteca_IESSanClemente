@@ -34,19 +34,31 @@ class GestorBaseDatos {
                 }
 
                 // 2. Por cada libro sin copias, creamos según su tipo
-                val sqlInsert = "INSERT INTO ejemplares (libro_id, codigo_ejemplar, fecha_adquisicion, estado) VALUES (?, ?, ?, 'DISPONIBLE')"
+                val sqlInsert = """
+                INSERT INTO ejemplares (libro_id, codigo_ejemplar, numero_revista, fecha_adquisicion, estado) 
+                VALUES (?, ?, ?, ?, 'DISPONIBLE')
+            """
                 val ps = conn.prepareStatement(sqlInsert)
 
                 var cont = 0
                 for ((idLibro, tipo) in librosParaRellenar) {
-                    // LIBROS: 3 ejemplares
-                    // REVISTAS: 1 ejemplar
-                    val numEjemplares = if (tipo == "LIBRO") 3 else 1
-
-                    for (i in 1..numEjemplares) {
+                    if (tipo == "LIBRO") {
+                        // LIBROS: 3 ejemplares, sin número de revista
+                        for (i in 1..3) {
+                            ps.setInt(1, idLibro)
+                            ps.setString(2, "AUTO-$idLibro-$i")
+                            ps.setNull(3, java.sql.Types.INTEGER) // numero_revista = NULL
+                            ps.setString(4, java.time.LocalDate.now().toString())
+                            ps.addBatch()
+                            cont++
+                        }
+                    } else {
+                        // REVISTAS: 1 ejemplar, número de revista empieza en 1
+                        // (Cuando el usuario añada más números, irán incrementando)
                         ps.setInt(1, idLibro)
-                        ps.setString(2, "AUTO-$idLibro-$i")
-                        ps.setString(3, java.time.LocalDate.now().toString())
+                        ps.setString(2, "REV-$idLibro-1")
+                        ps.setInt(3, 1) // numero_revista = 1
+                        ps.setString(4, java.time.LocalDate.now().toString())
                         ps.addBatch()
                         cont++
                     }
@@ -114,6 +126,7 @@ class GestorBaseDatos {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 libro_id INTEGER,
                 codigo_ejemplar TEXT,
+                numero_revista INTEGER DEFAULT NULL,
                 fecha_adquisicion TEXT,
                 estado TEXT DEFAULT 'DISPONIBLE',
                 FOREIGN KEY(libro_id) REFERENCES libros(id) ON DELETE CASCADE
@@ -174,16 +187,17 @@ class GestorBaseDatos {
                 ('77777777X', 'Luis Conserje', 'CONSERJE', 'luis.conserje@sanclemente.com');
             """)
 
+
             // Insertar LIBROS de ejemplo (tipo_publicacion = 'LIBRO')
             stmt.execute("""
                 INSERT OR IGNORE INTO libros 
-                (isbn, titulo, tipo_publicacion, autor, nacionalidad_autor, editorial, idioma, edicion, temas, modulos_relacionados, ciclos_relacionados) 
+                (isbn, titulo, tipo_publicacion, autor, nacionalidad_autor, editorial, idioma, edicion, fecha_publicacion, temas, modulos_relacionados, ciclos_relacionados) 
                 VALUES
-                ('978-84-123-4567-0', 'Don Quijote de la Mancha', 'LIBRO', 'Miguel de Cervantes', 'Español', 'Alfaguara', 'Español', '1ª Edicion', 'Literatura Clásica', 'Lengua y Literatura', 'Todos'),
-                ('978-84-456-7890-1', 'Kotlin for Beginners', 'LIBRO', 'JetBrains Team', 'Internacional', 'OReilly', 'Inglés', '1ª Edicion', 'Programación', 'Programación', 'DAM, DAW'),
-                ('978-84-789-0123-2', 'Principios de Diseño de Interfaces', 'LIBRO', 'IES San Clemente', 'Español', 'Autoedicion', 'Español', '1ª Edicion', 'Desarrollo de Interfaces', 'DI', 'DAM'),
-                ('978-84-234-5678-3', 'Clean Code', 'LIBRO', 'Robert C. Martin', 'Estadounidense', 'Prentice Hall', 'Inglés', '1ª Edicion', 'Buenas Prácticas', 'Programación', 'DAM, DAW'),
-                ('978-84-567-8901-4', 'Cien Años de Soledad', 'LIBRO', 'Gabriel Garcia Marquez', 'Colombiano', 'Sudamericana', 'Español', '1ª Edicion', 'Literatura', 'Lengua', 'Todos');
+                ('978-84-123-4567-0', 'Don Quijote de la Mancha', 'LIBRO', 'Miguel de Cervantes', 'Español', 'Alfaguara', 'Español', '1ª Edicion', '1605-01-16', 'Literatura Clásica', 'Lengua y Literatura', 'Todos'),
+                ('978-84-456-7890-1', 'Kotlin for Beginners', 'LIBRO', 'JetBrains Team', 'Internacional', 'OReilly', 'Inglés', '1ª Edicion', '2023-05-15', 'Programación', 'Programación', 'DAM, DAW'),
+                ('978-84-789-0123-2', 'Principios de Diseño de Interfaces', 'LIBRO', 'IES San Clemente', 'Español', 'Autoedicion', 'Español', '1ª Edicion', '2024-09-01', 'Desarrollo de Interfaces', 'DI', 'DAM'),
+                ('978-84-234-5678-3', 'Clean Code', 'LIBRO', 'Robert C. Martin', 'Estadounidense', 'Prentice Hall', 'Inglés', '1ª Edicion', '2008-08-01', 'Buenas Prácticas', 'Programación', 'DAM, DAW'),
+                ('978-84-567-8901-4', 'Cien Años de Soledad', 'LIBRO', 'Gabriel Garcia Marquez', 'Colombiano', 'Sudamericana', 'Español', '1ª Edicion', '1967-05-30', 'Literatura', 'Lengua', 'Todos');
             """)
 
             // Insertar REVISTAS de ejemplo (tipo_publicacion = 'REVISTA')
