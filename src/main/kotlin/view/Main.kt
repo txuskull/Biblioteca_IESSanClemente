@@ -12,6 +12,8 @@ class Main : Application() {
         val gestor = GestorBaseDatos()
         gestor.iniciarSistema()
 
+        //gestor.generarEjemplaresFaltantes()
+
         // SALTAR LOGIN - IR DIRECTO AL DASHBOARD
         val loader = FXMLLoader(javaClass.getResource("/fxml/dashboard.fxml"))
         val root = loader.load<Any>()

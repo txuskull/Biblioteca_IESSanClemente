@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.stage.Stage
+import model.TipoPublicacion
 import java.time.LocalDate
 
 class PrestamoFormController {
@@ -18,18 +19,17 @@ class PrestamoFormController {
     @FXML private lateinit var btnCancelar: Button
     @FXML private lateinit var btnGuardar: Button
 
-    class ComboUsuario(val id: Int, val nombre: String) {
+    class ComboUsuario(val id: Int, val nombre: String, val tipo: String) {
         override fun toString(): String = nombre
     }
 
-    class ComboLibro(val id: Int, val titulo: String) {
-        override fun toString(): String = titulo
+    class ComboLibro(val id: Int, val titulo: String, val tipoPublicacion: String) {
+        override fun toString(): String = "$titulo [$tipoPublicacion]"
     }
 
     @FXML
     fun initialize() {
         datePicker.value = LocalDate.now()
-        dateDevolucion.value = LocalDate.now().plusDays(7) // 7 días por defecto
 
         cargarUsuarios(cmbUsuarios, "")
         cargarLibros(cmbLibros)
@@ -37,6 +37,36 @@ class PrestamoFormController {
         txtBuscarUsuario.textProperty().addListener { _, _, nuevoTexto ->
             cargarUsuarios(cmbUsuarios, nuevoTexto)
             cmbUsuarios.show()
+        }
+
+        // Listener para calcular fecha de devolución automáticamente
+        cmbLibros.selectionModel.selectedItemProperty().addListener { _, _, libroSeleccionado ->
+            if (libroSeleccionado != null) {
+                calcularFechaDevolucion()
+            }
+        }
+
+        cmbUsuarios.selectionModel.selectedItemProperty().addListener { _, _, _ ->
+            calcularFechaDevolucion()
+        }
+    }
+
+    private fun calcularFechaDevolucion() {
+        val libro = cmbLibros.value
+        val usuario = cmbUsuarios.value
+
+        if (libro != null && usuario != null) {
+            val fechaPrestamo = datePicker.value
+
+            // Determinar días según tipo de publicación y tipo de usuario
+            val dias = when {
+                libro.tipoPublicacion == "LIBRO" -> 7 // Libros siempre 7 días
+                libro.tipoPublicacion == "REVISTA" && usuario.tipo == "PROFESOR" -> 7 // Profesores: 7 días con revistas
+                libro.tipoPublicacion == "REVISTA" -> 1 // Estudiantes/Personal: 1 día con revistas
+                else -> 7
+            }
+
+            dateDevolucion.value = fechaPrestamo.plusDays(dias.toLong())
         }
     }
 
@@ -53,14 +83,29 @@ class PrestamoFormController {
         val fechaD = dateDevolucion.value
 
         if (usuario == null || libro == null || fechaP == null || fechaD == null) {
-            mostrarAlerta("Faltan datos", "Debes seleccionar usuario, libro y fechas.")
-        } else {
-            if (usuarioTieneSancionActiva(usuario.id)) {
-                mostrarAlerta("USUARIO SANCIONADO", "No se puede realizar el prestamo. El alumno tiene una sancion activa.")
-            } else {
-                guardarPrestamo(usuario.id, libro.id, fechaP, fechaD)
+            mostrarAlerta("Faltan datos", "Debes seleccionar usuario, libro y fechas.", Alert.AlertType.WARNING)
+            return
+        }
+
+        // VALIDACIÓN 1: Usuario sancionado
+        if (usuarioTieneSancionActiva(usuario.id)) {
+            mostrarAlerta("USUARIO SANCIONADO", "No se puede realizar el préstamo. El usuario tiene una sanción activa.", Alert.AlertType.ERROR)
+            return
+        }
+
+        // VALIDACIÓN 2: Solo 1 revista simultánea para estudiantes/personal
+        if (libro.tipoPublicacion == "REVISTA" && usuario.tipo != "PROFESOR") {
+            if (usuarioTieneRevistaPrestada(usuario.id)) {
+                mostrarAlerta("LÍMITE DE REVISTAS",
+                    "Los estudiantes y personal solo pueden tener 1 revista prestada a la vez.\n" +
+                            "Los profesores no tienen esta restricción.",
+                    Alert.AlertType.ERROR)
+                return
             }
         }
+
+        // Intentar guardar préstamo
+        guardarPrestamo(usuario.id, libro.id, fechaP, fechaD)
     }
 
     private fun usuarioTieneSancionActiva(idUsuario: Int): Boolean {
@@ -84,6 +129,35 @@ class PrestamoFormController {
         return sancionado
     }
 
+    private fun usuarioTieneRevistaPrestada(idUsuario: Int): Boolean {
+        var tieneRevista = false
+        val gestor = GestorBaseDatos()
+        val conn = gestor.getConexion()
+        if (conn != null) {
+            try {
+                val sql = """
+                    SELECT COUNT(*) as total
+                    FROM prestamos p
+                    JOIN ejemplares e ON p.ejemplar_id = e.id
+                    JOIN libros l ON e.libro_id = l.id
+                    WHERE p.usuario_id = ? 
+                    AND l.tipo_publicacion = 'REVISTA'
+                    AND p.fecha_devolucion_real IS NULL
+                """
+                val ps = conn.prepareStatement(sql)
+                ps.setInt(1, idUsuario)
+                val rs = ps.executeQuery()
+                if (rs.next() && rs.getInt("total") > 0) {
+                    tieneRevista = true
+                }
+                conn.close()
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        }
+        return tieneRevista
+    }
+
     private fun cargarUsuarios(cmb: ComboBox<ComboUsuario>, filtro: String) {
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
@@ -93,13 +167,18 @@ class PrestamoFormController {
 
         if (conn != null) {
             try {
-                val sql = "SELECT id, nombre FROM usuarios WHERE tipo = 'ESTUDIANTE' AND nombre LIKE ?"
+                // Cargar TODOS los usuarios (estudiantes, profesores, conserjes...)
+                val sql = "SELECT id, nombre, tipo FROM usuarios WHERE nombre LIKE ?"
                 val ps = conn.prepareStatement(sql)
                 ps.setString(1, "%$filtro%")
 
                 val rs = ps.executeQuery()
                 while (rs.next()) {
-                    cmb.items.add(ComboUsuario(rs.getInt("id"), rs.getString("nombre")))
+                    cmb.items.add(ComboUsuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("tipo")
+                    ))
                 }
                 conn.close()
 
@@ -119,10 +198,14 @@ class PrestamoFormController {
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
-                val sql = "SELECT id, titulo FROM libros"
+                val sql = "SELECT id, titulo, tipo_publicacion FROM libros"
                 val rs = conn.createStatement().executeQuery(sql)
                 while (rs.next()) {
-                    cmb.items.add(ComboLibro(rs.getInt("id"), rs.getString("titulo")))
+                    cmb.items.add(ComboLibro(
+                        rs.getInt("id"),
+                        rs.getString("titulo"),
+                        rs.getString("tipo_publicacion")
+                    ))
                 }
                 conn.close()
             } catch (e: Exception) {
@@ -166,18 +249,19 @@ class PrestamoFormController {
                     conn.close()
 
                     val alerta = Alert(Alert.AlertType.INFORMATION)
-                    alerta.title = "Exito"
+                    alerta.title = "Éxito"
                     alerta.headerText = null
-                    alerta.contentText = "Prestamo registrado correctamente."
+                    alerta.contentText = "Préstamo registrado correctamente.\nDevolución prevista: $fDev"
                     alerta.showAndWait()
 
                     navegarAPrestamos()
 
                 } else {
-                    mostrarAlerta("Sin stock", "No hay ejemplares disponibles de este libro.")
+                    mostrarAlerta("Sin stock", "No hay ejemplares disponibles de esta publicación.", Alert.AlertType.ERROR)
                 }
             } catch (e: Exception) {
                 println(e.message)
+                e.printStackTrace()
             }
         }
     }
@@ -192,8 +276,8 @@ class PrestamoFormController {
         stage.title = "Gestión de Préstamos"
     }
 
-    private fun mostrarAlerta(titulo: String, mensaje: String) {
-        val alerta = Alert(Alert.AlertType.WARNING)
+    private fun mostrarAlerta(titulo: String, mensaje: String, tipo: Alert.AlertType = Alert.AlertType.WARNING) {
+        val alerta = Alert(tipo)
         alerta.title = titulo
         alerta.headerText = null
         alerta.contentText = mensaje

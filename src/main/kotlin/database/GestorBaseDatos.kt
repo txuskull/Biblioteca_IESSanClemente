@@ -16,6 +16,57 @@ class GestorBaseDatos {
         return conn
     }
 
+    fun generarEjemplaresFaltantes() {
+        val conn = getConexion()
+        if (conn != null) {
+            try {
+                // 1. Buscar libros que NO tengan ejemplares
+                val sql = """
+                SELECT l.id, l.tipo_publicacion 
+                FROM libros l 
+                WHERE NOT EXISTS (SELECT 1 FROM ejemplares e WHERE e.libro_id = l.id)
+            """
+                val rs = conn.createStatement().executeQuery(sql)
+
+                val librosParaRellenar = mutableListOf<Pair<Int, String>>()
+                while (rs.next()) {
+                    librosParaRellenar.add(Pair(rs.getInt("id"), rs.getString("tipo_publicacion")))
+                }
+
+                // 2. Por cada libro sin copias, creamos según su tipo
+                val sqlInsert = "INSERT INTO ejemplares (libro_id, codigo_ejemplar, fecha_adquisicion, estado) VALUES (?, ?, ?, 'DISPONIBLE')"
+                val ps = conn.prepareStatement(sqlInsert)
+
+                var cont = 0
+                for ((idLibro, tipo) in librosParaRellenar) {
+                    // LIBROS: 3 ejemplares
+                    // REVISTAS: 1 ejemplar
+                    val numEjemplares = if (tipo == "LIBRO") 3 else 1
+
+                    for (i in 1..numEjemplares) {
+                        ps.setInt(1, idLibro)
+                        ps.setString(2, "AUTO-$idLibro-$i")
+                        ps.setString(3, java.time.LocalDate.now().toString())
+                        ps.addBatch()
+                        cont++
+                    }
+                }
+
+                if (cont > 0) {
+                    ps.executeBatch()
+                    println("✅ Se han generado automáticamente $cont ejemplares nuevos para el inventario.")
+                } else {
+                    println("ℹ️ Todos los libros ya tienen ejemplares asignados.")
+                }
+
+                conn.close()
+            } catch (e: Exception) {
+                println("Error generando ejemplares: ${e.message}")
+                e.printStackTrace()
+            }
+        }
+    }
+
     // ESTA FUNCION SOLO SE LLAMARÁ UNA VEZ AL PRINCIPIO
     fun iniciarSistema() {
         val sqlUsers = """
