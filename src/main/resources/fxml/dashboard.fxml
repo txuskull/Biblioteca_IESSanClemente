@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.DashboardController"
+            prefHeight="700" prefWidth="1200">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: #1976D2;"
+              prefHeight="70">
+            <padding>
+                <Insets left="20" right="20"/>
+            </padding>
+
+            <Label text="📚" style="-fx-font-size: 30;"/>
+
+            <Label text="Gestión de Biblioteca" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="btnCerrarSesion" text="Cerrar Sesión"
+                    onAction="#handleCerrarSesion"
+                    style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-font-size: 13; -fx-background-radius: 5;"
+                    prefHeight="35" prefWidth="120"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox>
+            <VBox spacing="5" prefWidth="250"
+                  style="-fx-background-color: #FAFAFA; -fx-border-color: #E0E0E0; -fx-border-width: 0 1 0 0;">
+                <padding>
+                    <Insets top="30" left="20" right="20"/>
+                </padding>
+
+                <Label text="MENU PRINCIPAL" textFill="#9E9E9E">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="20"/>
+                    </VBox.margin>
+                </Label>
+
+                <Button fx:id="btnCatalogo" text="📚  Catalogo" alignment="CENTER_LEFT" maxWidth="Infinity"
+                        onAction="#handleCatalogo"
+                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
+                        prefHeight="50">
+                    <padding>
+                        <Insets left="10"/>
+                    </padding>
+                </Button>
+
+                <Button fx:id="btnUsuarios" text="👥  Usuarios" alignment="CENTER_LEFT" maxWidth="Infinity"
+                        onAction="#handleUsuarios"
+                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
+                        prefHeight="50">
+                    <padding>
+                        <Insets left="10"/>
+                    </padding>
+                </Button>
+
+                <Button fx:id="btnPrestamos" text="💰  Prestamos" alignment="CENTER_LEFT" maxWidth="Infinity"
+                        onAction="#handlePrestamos"
+                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
+                        prefHeight="50">
+                    <padding>
+                        <Insets left="10"/>
+                    </padding>
+                </Button>
+
+                <Button fx:id="btnSanciones" text="🔨  Sanciones" alignment="CENTER_LEFT" maxWidth="Infinity"
+                        onAction="#handleSanciones"
+                        style="-fx-background-color: transparent; -fx-text-fill: #424242; -fx-font-size: 14;"
+                        prefHeight="50">
+                    <padding>
+                        <Insets left="10"/>
+                    </padding>
+                </Button>
+            </VBox>
+
+            <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5;">
+                <VBox spacing="30" style="-fx-background-color: #F5F5F5;">
+                    <padding>
+                        <Insets top="40" right="40" bottom="40" left="40"/>
+                    </padding>
+
+                    <Label text="Resumen del Sistema">
+                        <font>
+                            <Font name="System Bold" size="32"/>
+                        </font>
+                    </Label>
+
+                    <HBox spacing="20">
+                        <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                              style="-fx-background-color: #42A5F5; -fx-background-radius: 10;">
+                            <Label fx:id="lblTotalLibros" text="6" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="48"/>
+                                </font>
+                            </Label>
+                            <Label text="Total Libros" textFill="WHITE">
+                                <font>
+                                    <Font name="System" size="16"/>
+                                </font>
+                            </Label>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                              style="-fx-background-color: #66BB6A; -fx-background-radius: 10;">
+                            <Label fx:id="lblPrestamosTotales" text="10" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="48"/>
+                                </font>
+                            </Label>
+                            <Label text="Prestamos Totales" textFill="WHITE">
+                                <font>
+                                    <Font name="System" size="16"/>
+                                </font>
+                            </Label>
+                        </VBox>
+
+                        <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                              style="-fx-background-color: #EC407A; -fx-background-radius: 10;">
+                            <Label fx:id="lblUsuarios" text="5" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="48"/>
+                                </font>
+                            </Label>
+                            <Label text="Usuarios" textFill="WHITE">
+                                <font>
+                                    <Font name="System" size="16"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </HBox>
+
+                    <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                          style="-fx-background-color: #EF5350; -fx-background-radius: 10;">
+                        <Label fx:id="lblSancionesActivas" text="2" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="48"/>
+                            </font>
+                        </Label>
+                        <Label text="Sanciones Activas" textFill="WHITE">
+                            <font>
+                                <Font name="System" size="16"/>
+                            </font>
+                        </Label>
+                    </VBox>
+
+                    <HBox spacing="40">
+                        <VBox spacing="15" prefWidth="400" prefHeight="350"
+                              style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20"/>
+                            </padding>
+                            <Label text="Disponibilidad de Ejemplares">
+                                <font>
+                                    <Font name="System Bold" size="18"/>
+                                </font>
+                            </Label>
+                            <Label text="[Gráfica Circular Aquí]" style="-fx-text-fill: #9E9E9E;">
+                                <VBox.margin>
+                                    <Insets top="100"/>
+                                </VBox.margin>
+                            </Label>
+                        </VBox>
+
+                        <VBox spacing="15" prefWidth="400" prefHeight="350"
+                              style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20"/>
+                            </padding>
+                            <Label text="Top 5 Libros Más Prestados">
+                                <font>
+                                    <Font name="System Bold" size="18"/>
+                                </font>
+                            </Label>
+                            <Label text="[Gráfica de Barras Aquí]" style="-fx-text-fill: #9E9E9E;">
+                                <VBox.margin>
+                                    <Insets top="100"/>
+                                </VBox.margin>
+                            </Label>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+        </HBox>
+    </center>
+</BorderPane>

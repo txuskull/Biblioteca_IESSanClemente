@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.SancionFormController"
+            prefHeight="750" prefWidth="1150"
+            style="-fx-background-color: white;">
+
+    <top>
+        <StackPane style="-fx-background-color: #3579be;" prefHeight="110">
+            <padding>
+                <Insets top="15" right="30" bottom="15" left="30"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT">
+                <ImageView fitHeight="150" fitWidth="150" preserveRatio="true"/>
+            </HBox>
+
+            <Label text="Aplicar Sancion Manual" textFill="WHITE">
+                <font>
+                    <Font name="Arial Bold" size="28"/>
+                </font>
+            </Label>
+        </StackPane>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <GridPane hgap="20" vgap="20" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="50" right="50" bottom="50" left="50"/>
+                </padding>
+
+                <columnConstraints>
+                    <ColumnConstraints/>
+                    <ColumnConstraints/>
+                </columnConstraints>
+
+                <Label text="Filtrar Alumno:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                       style="-fx-text-fill: #555;">
+                    <font>
+                        <Font name="Arial Bold" size="14"/>
+                    </font>
+                </Label>
+                <TextField fx:id="txtBuscar" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                           promptText="Escribe nombre para filtrar..."
+                           prefWidth="400" prefHeight="40"/>
+
+                <Label text="Seleccionar Alumno:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                       style="-fx-text-fill: #555;">
+                    <font>
+                        <Font name="Arial Bold" size="14"/>
+                    </font>
+                </Label>
+                <ComboBox fx:id="cmbAlumnos" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                          promptText="Selecciona al alumno..."
+                          prefWidth="400" prefHeight="40"/>
+
+                <Label text="Motivo del castigo:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                       style="-fx-text-fill: #555;">
+                    <font>
+                        <Font name="Arial Bold" size="14"/>
+                    </font>
+                </Label>
+                <TextField fx:id="txtMotivo" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                           promptText="Ej: Libro devuelto con paginas rotas"
+                           prefWidth="400" prefHeight="40"/>
+
+                <Label text="Dias de sancion:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                       style="-fx-text-fill: #555;">
+                    <font>
+                        <Font name="Arial Bold" size="14"/>
+                    </font>
+                </Label>
+                <Spinner fx:id="spinnerDias" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                         prefWidth="400" prefHeight="40" editable="true"/>
+            </GridPane>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button fx:id="btnCancelar" text="CANCELAR" prefWidth="200" prefHeight="45"
+                    onAction="#handleCancelar"
+                    style="-fx-background-color: #6c757d; -fx-text-fill: white;">
+                <font>
+                    <Font name="Arial Bold" size="14"/>
+                </font>
+            </Button>
+
+            <Button fx:id="btnGuardar" text="APLICAR SANCION" prefWidth="200" prefHeight="45"
+                    onAction="#handleGuardar"
+                    style="-fx-background-color: #d9534f; -fx-text-fill: white;">
+                <font>
+                    <Font name="Arial Bold" size="14"/>
+                </font>
+            </Button>
+        </HBox>
+    </bottom>
+</BorderPane>

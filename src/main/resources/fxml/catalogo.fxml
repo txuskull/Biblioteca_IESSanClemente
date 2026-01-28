@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.CatalogoController"
+            prefHeight="750" prefWidth="1150"
+            style="-fx-background-color: white;">
+
+    <top>
+        <StackPane style="-fx-background-color: #3579be;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <HBox spacing="15" alignment="CENTER">
+                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true"/>
+
+                <Label text="Catálogo de Libros" textFill="WHITE">
+                    <font>
+                        <Font name="Arial Bold" size="24"/>
+                    </font>
+                </Label>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" pickOnBounds="false">
+                <Button fx:id="btnVolver" text="Volver"
+                        onAction="#handleVolver"
+                        style="-fx-background-color: #2a61a0; -fx-text-fill: white;"/>
+            </HBox>
+        </StackPane>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TextField fx:id="txtBuscar"
+                       promptText="Buscar por titulo, autor o ISBN..."
+                       prefHeight="40"
+                       maxWidth="500"/>
+
+            <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn text="ID" prefWidth="50"/>
+                    <TableColumn text="ISBN" prefWidth="120"/>
+                    <TableColumn text="Titulo" prefWidth="200"/>
+                    <TableColumn text="Autor" prefWidth="150"/>
+                    <TableColumn text="Editorial" prefWidth="150"/>
+                    <TableColumn text="Estado" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="15" alignment="CENTER"
+              style="-fx-background-color: #f4f4f4;">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button fx:id="btnNuevo" text="Nuevo Libro"
+                    onAction="#handleNuevo"
+                    style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+
+            <Button fx:id="btnEditar" text="Editar Seleccionado"
+                    onAction="#handleEditar"
+                    style="-fx-background-color: #ffc107; -fx-text-fill: black;"/>
+
+            <Button fx:id="btnBorrar" text="Borrar Libro"
+                    onAction="#handleBorrar"
+                    style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
+        </HBox>
+    </bottom>
+</BorderPane>
