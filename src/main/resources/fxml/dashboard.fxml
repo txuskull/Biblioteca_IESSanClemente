@@ -10,6 +10,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.DashboardController"
             prefHeight="700" prefWidth="1200">
@@ -93,26 +97,33 @@
                 </Button>
             </VBox>
 
+            <!-- Contenedor principal con scroll vertical.
+     fitToWidth=true hace que el contenido se ajuste al ancho -->
             <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5;">
-                <VBox spacing="30" style="-fx-background-color: #F5F5F5;">
+
+                <!-- Contenedor vertical principal de todo el dashboard -->
+                <VBox spacing="30">
+
+                    <!-- Márgenes internos del VBox principal -->
                     <padding>
-                        <Insets top="40" right="40" bottom="40" left="40"/>
+                        <Insets top="20" right="20" bottom="30" left="20"/>
                     </padding>
 
-                    <Label text="Resumen del Sistema">
-                        <font>
-                            <Font name="System Bold" size="32"/>
-                        </font>
-                    </Label>
+                    <!-- FILA SUPERIOR: tarjetas de resumen (estadísticas rápidas) -->
+                    <HBox spacing="20" alignment="CENTER_LEFT">
 
-                    <HBox spacing="20">
-                        <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                        <!-- Tarjeta: Total de libros -->
+                        <VBox alignment="CENTER" spacing="30" prefWidth="220" prefHeight="120"
                               style="-fx-background-color: #42A5F5; -fx-background-radius: 10;">
+
+                            <!-- Número total de libros -->
                             <Label fx:id="lblTotalLibros" text="6" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
+
+                            <!-- Texto descriptivo -->
                             <Label text="Total Libros" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
@@ -120,13 +131,18 @@
                             </Label>
                         </VBox>
 
-                        <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                        <!-- Tarjeta: préstamos totales -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="220" prefHeight="120"
                               style="-fx-background-color: #66BB6A; -fx-background-radius: 10;">
+
+                            <!-- Número total de préstamos -->
                             <Label fx:id="lblPrestamosTotales" text="10" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
+
+                            <!-- Texto descriptivo -->
                             <Label text="Prestamos Totales" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
@@ -134,14 +150,38 @@
                             </Label>
                         </VBox>
 
-                        <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
+                        <!-- Tarjeta: número de usuarios -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="220" prefHeight="120"
                               style="-fx-background-color: #EC407A; -fx-background-radius: 10;">
+
+                            <!-- Número de usuarios registrados -->
                             <Label fx:id="lblUsuarios" text="5" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
                                 </font>
                             </Label>
+
+                            <!-- Texto descriptivo -->
                             <Label text="Usuarios" textFill="WHITE">
+                                <font>
+                                    <Font name="System" size="16"/>
+                                </font>
+                            </Label>
+                        </VBox>
+
+                        <!-- Tarjeta: sanciones activas -->
+                        <VBox alignment="CENTER" spacing="10" prefWidth="220" prefHeight="120"
+                              style="-fx-background-color: #EF5350; -fx-background-radius: 10;">
+
+                            <!-- Número de sanciones activas -->
+                            <Label fx:id="lblSancionesActivas" text="2" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="48"/>
+                                </font>
+                            </Label>
+
+                            <!-- Texto descriptivo -->
+                            <Label text="Sanciones Activas" textFill="WHITE">
                                 <font>
                                     <Font name="System" size="16"/>
                                 </font>
@@ -149,57 +189,69 @@
                         </VBox>
                     </HBox>
 
-                    <VBox alignment="CENTER" spacing="10" prefWidth="250" prefHeight="120"
-                          style="-fx-background-color: #EF5350; -fx-background-radius: 10;">
-                        <Label fx:id="lblSancionesActivas" text="2" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="48"/>
-                            </font>
-                        </Label>
-                        <Label text="Sanciones Activas" textFill="WHITE">
-                            <font>
-                                <Font name="System" size="16"/>
-                            </font>
-                        </Label>
-                    </VBox>
+                    <!-- FILA INFERIOR: gráficos -->
+                    <HBox spacing="20" alignment="CENTER_LEFT">
 
-                    <HBox spacing="40">
-                        <VBox spacing="15" prefWidth="400" prefHeight="350"
-                              style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                        <!-- Contenedor del gráfico circular -->
+                        <VBox spacing="15" prefWidth="450" prefHeight="400" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: white; -fx-background-radius: 10;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+
+                            <!-- Márgenes internos -->
                             <padding>
                                 <Insets top="20" right="20" bottom="20" left="20"/>
                             </padding>
+
+                            <!-- Título del gráfico -->
                             <Label text="Disponibilidad de Ejemplares">
                                 <font>
                                     <Font name="System Bold" size="18"/>
                                 </font>
                             </Label>
-                            <Label text="[Gráfica Circular Aquí]" style="-fx-text-fill: #9E9E9E;">
-                                <VBox.margin>
-                                    <Insets top="100"/>
-                                </VBox.margin>
-                            </Label>
+
+                            <!-- Gráfico circular de disponibilidad -->
+                            <PieChart fx:id="pieChartDisponibilidad"
+                                      prefHeight="320"
+                                      VBox.vgrow="ALWAYS"/>
                         </VBox>
 
-                        <VBox spacing="15" prefWidth="400" prefHeight="350"
-                              style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                        <!-- Contenedor del gráfico de barras -->
+                        <VBox spacing="15" prefWidth="450" prefHeight="400" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: white; -fx-background-radius: 10;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+
+                            <!-- Márgenes internos -->
                             <padding>
                                 <Insets top="20" right="20" bottom="20" left="20"/>
                             </padding>
-                            <Label text="Top 5 Libros Más Prestados">
+
+                            <!-- Título del gráfico -->
+                            <Label text="Top 5 Libros Mas Prestados">
                                 <font>
                                     <Font name="System Bold" size="18"/>
                                 </font>
                             </Label>
-                            <Label text="[Gráfica de Barras Aquí]" style="-fx-text-fill: #9E9E9E;">
-                                <VBox.margin>
-                                    <Insets top="100"/>
-                                </VBox.margin>
-                            </Label>
+
+                            <!-- Gráfico de barras -->
+                            <BarChart fx:id="barChartTop5"
+                                      prefHeight="320"
+                                      VBox.vgrow="ALWAYS">
+
+                                <!-- Eje X: nombres de libros -->
+                                <xAxis>
+                                    <CategoryAxis side="BOTTOM" label="Libros"/>
+                                </xAxis>
+
+                                <!-- Eje Y: número de préstamos -->
+                                <yAxis>
+                                    <NumberAxis side="LEFT" label="Prestamos"/>
+                                </yAxis>
+                            </BarChart>
                         </VBox>
                     </HBox>
                 </VBox>
             </ScrollPane>
+
         </HBox>
     </center>
 </BorderPane>

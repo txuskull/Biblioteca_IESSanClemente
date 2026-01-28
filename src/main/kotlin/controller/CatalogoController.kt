@@ -7,6 +7,7 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.control.cell.PropertyValueFactory
 import javafx.stage.Stage
 import model.Libro
 
@@ -24,6 +25,9 @@ class CatalogoController {
 
     @FXML
     fun initialize() {
+        // IMPORTANTE: Configurar las columnas de la tabla
+        configurarColumnas()
+
         listaLibros.setAll(cargarLibros())
         listaFiltrada = FilteredList(listaLibros) { true }
         tabla.items = listaFiltrada
@@ -39,6 +43,24 @@ class CatalogoController {
                 }
             }
         }
+    }
+
+    private fun configurarColumnas() {
+        // Obtener las columnas de la tabla
+        val colId = tabla.columns[0] as TableColumn<Libro, Int>
+        val colIsbn = tabla.columns[1] as TableColumn<Libro, String>
+        val colTitulo = tabla.columns[2] as TableColumn<Libro, String>
+        val colAutor = tabla.columns[3] as TableColumn<Libro, String>
+        val colEditorial = tabla.columns[4] as TableColumn<Libro, String>
+        val colEstado = tabla.columns[5] as TableColumn<Libro, String>
+
+        // Vincular columnas con propiedades del modelo
+        colId.cellValueFactory = PropertyValueFactory("id")
+        colIsbn.cellValueFactory = PropertyValueFactory("isbn")
+        colTitulo.cellValueFactory = PropertyValueFactory("titulo")
+        colAutor.cellValueFactory = PropertyValueFactory("autor")
+        colEditorial.cellValueFactory = PropertyValueFactory("editorial")
+        colEstado.cellValueFactory = PropertyValueFactory("estado")
     }
 
     @FXML
@@ -112,6 +134,7 @@ class CatalogoController {
                     ))
                 }
                 conn.close()
+                println("✅ Se cargaron ${lista.size} libros en el catálogo")
             } catch (e: Exception) {
                 println("Error cargando libros: ${e.message}")
             }

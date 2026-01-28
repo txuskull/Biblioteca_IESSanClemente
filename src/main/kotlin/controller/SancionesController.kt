@@ -37,7 +37,6 @@ class SancionesController {
         colFin.cellValueFactory = PropertyValueFactory("fechaFin")
         colEstado.cellValueFactory = PropertyValueFactory("estado")
 
-        // Colorear estado
         colEstado.setCellFactory {
             object : TableCell<Sancion, String>() {
                 override fun updateItem(item: String?, empty: Boolean) {

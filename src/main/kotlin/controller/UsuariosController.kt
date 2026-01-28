@@ -6,6 +6,7 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.control.cell.PropertyValueFactory
 import javafx.stage.Stage
 import model.Usuario
 
@@ -19,7 +20,22 @@ class UsuariosController {
 
     @FXML
     fun initialize() {
+        configurarColumnas()
         tabla.items = cargarUsuarios()
+    }
+
+    private fun configurarColumnas() {
+        val colDni = tabla.columns[0] as TableColumn<Usuario, String>
+        val colNombre = tabla.columns[1] as TableColumn<Usuario, String>
+        val colTipo = tabla.columns[2] as TableColumn<Usuario, String>
+        val colEmail = tabla.columns[3] as TableColumn<Usuario, String>
+        val colSancion = tabla.columns[4] as TableColumn<Usuario, String>
+
+        colDni.cellValueFactory = PropertyValueFactory("dni")
+        colNombre.cellValueFactory = PropertyValueFactory("nombre")
+        colTipo.cellValueFactory = PropertyValueFactory("tipo")
+        colEmail.cellValueFactory = PropertyValueFactory("email")
+        colSancion.cellValueFactory = PropertyValueFactory("sancionadoHasta")
     }
 
     @FXML

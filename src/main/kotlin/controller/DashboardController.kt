@@ -4,6 +4,9 @@ import database.GestorBaseDatos
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
+import javafx.scene.chart.BarChart
+import javafx.scene.chart.PieChart
+import javafx.scene.chart.XYChart
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.stage.Stage
@@ -21,9 +24,14 @@ class DashboardController {
     @FXML private lateinit var lblUsuarios: Label
     @FXML private lateinit var lblSancionesActivas: Label
 
+    @FXML private lateinit var pieChartDisponibilidad: PieChart
+    @FXML private lateinit var barChartTop5: BarChart<String, Number>
+
     @FXML
     fun initialize() {
         cargarEstadisticas()
+        cargarGraficaDisponibilidad()
+        cargarGraficaTop5()
     }
 
     @FXML
@@ -91,6 +99,89 @@ class DashboardController {
                 conn.close()
             } catch (e: Exception) {
                 println("Error cargando estadísticas: ${e.message}")
+            }
+        }
+    }
+
+    private fun cargarGraficaDisponibilidad() {
+        val gestor = GestorBaseDatos()
+        val conn = gestor.getConexion()
+
+        if (conn != null) {
+            try {
+                val sql = """
+                    SELECT estado, COUNT(*) as cantidad 
+                    FROM ejemplares 
+                    GROUP BY estado
+                """
+                val rs = conn.createStatement().executeQuery(sql)
+
+                var disponibles = 0
+                var prestados = 0
+
+                while (rs.next()) {
+                    val estado = rs.getString("estado")
+                    val cantidad = rs.getInt("cantidad")
+
+                    when (estado) {
+                        "DISPONIBLE" -> disponibles = cantidad
+                        "PRESTADO" -> prestados = cantidad
+                    }
+                }
+
+                conn.close()
+
+                val dataDisponibles = PieChart.Data("Disponibles ($disponibles)", disponibles.toDouble())
+                val dataPrestados = PieChart.Data("Prestados ($prestados)", prestados.toDouble())
+
+                pieChartDisponibilidad.data.addAll(dataDisponibles, dataPrestados)
+                pieChartDisponibilidad.setLegendVisible(true)
+
+            } catch (e: Exception) {
+                println("Error cargando gráfica de disponibilidad: ${e.message}")
+            }
+        }
+    }
+
+    private fun cargarGraficaTop5() {
+        val gestor = GestorBaseDatos()
+        val conn = gestor.getConexion()
+
+        if (conn != null) {
+            try {
+                val sql = """
+                    SELECT l.titulo, COUNT(p.id) as total_prestamos
+                    FROM prestamos p
+                    JOIN ejemplares e ON p.ejemplar_id = e.id
+                    JOIN libros l ON e.libro_id = l.id
+                    GROUP BY l.id, l.titulo
+                    ORDER BY total_prestamos DESC
+                    LIMIT 5
+                """
+                val rs = conn.createStatement().executeQuery(sql)
+
+                val series = XYChart.Series<String, Number>()
+                series.name = "Préstamos"
+
+                while (rs.next()) {
+                    val titulo = rs.getString("titulo")
+                    val total = rs.getInt("total_prestamos")
+
+                    val tituloCorto = if (titulo.length > 20)
+                        titulo.substring(0, 17) + "..."
+                    else
+                        titulo
+
+                    series.data.add(XYChart.Data(tituloCorto, total))
+                }
+
+                conn.close()
+
+                barChartTop5.data.add(series)
+                barChartTop5.setLegendVisible(false)
+
+            } catch (e: Exception) {
+                println("Error cargando gráfica top 5: ${e.message}")
             }
         }
     }

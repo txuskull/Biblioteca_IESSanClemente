@@ -39,7 +39,6 @@ class PrestamosController {
         colFechaPrevista.cellValueFactory = PropertyValueFactory("fechaDevolucionPrevista")
         colEstado.cellValueFactory = PropertyValueFactory("estado")
 
-        // Colorear estado
         colEstado.setCellFactory {
             object : TableCell<Prestamo, String>() {
                 override fun updateItem(item: String?, empty: Boolean) {
@@ -137,14 +136,12 @@ class PrestamosController {
                     val fechaHoy = LocalDate.now()
                     val fechaPrevista = LocalDate.parse(prestamo.fechaDevolucionPrevista)
 
-                    // VERIFICAR SI HAY RETRASO
                     if (fechaHoy.isAfter(fechaPrevista)) {
                         val diasRetraso = ChronoUnit.DAYS.between(fechaPrevista, fechaHoy)
-                        val diasSancion = diasRetraso * 2 // Regla: 2 días por cada día de retraso
+                        val diasSancion = diasRetraso * 2
 
                         val fechaFinSancion = fechaHoy.plusDays(diasSancion)
 
-                        // Obtener usuario_id del préstamo
                         val sqlUserId = "SELECT usuario_id FROM prestamos WHERE id = ?"
                         val psUser = conn.prepareStatement(sqlUserId)
                         psUser.setInt(1, prestamo.id)
@@ -153,7 +150,6 @@ class PrestamosController {
                         if (rsUser.next()) {
                             val userId = rsUser.getInt("usuario_id")
 
-                            // Insertar Sanción
                             val sqlSancion = """
                                 INSERT INTO sanciones (usuario_id, motivo, fecha_inicio, fecha_fin, dias_sancion, estado)
                                 VALUES (?, ?, ?, ?, ?, 'ACTIVA')
@@ -166,7 +162,6 @@ class PrestamosController {
                             psSancion.setLong(5, diasSancion)
                             psSancion.executeUpdate()
 
-                            // Avisar
                             val aviso = Alert(Alert.AlertType.WARNING)
                             aviso.headerText = "¡Sanción Aplicada!"
                             aviso.contentText = "El usuario tiene $diasRetraso días de retraso.\nSanción automática: $diasSancion días."
@@ -174,14 +169,12 @@ class PrestamosController {
                         }
                     }
 
-                    // Registrar devolución
                     val sqlUpdate = "UPDATE prestamos SET fecha_devolucion_real = ? WHERE id = ?"
                     val ps = conn.prepareStatement(sqlUpdate)
                     ps.setString(1, fechaHoy.toString())
                     ps.setInt(2, prestamo.id)
                     ps.executeUpdate()
 
-                    // Liberar ejemplar
                     val sqlLiberar = "UPDATE ejemplares SET estado = 'DISPONIBLE' WHERE id = (SELECT ejemplar_id FROM prestamos WHERE id = ?)"
                     val ps2 = conn.prepareStatement(sqlLiberar)
                     ps2.setInt(1, prestamo.id)
