@@ -37,6 +37,7 @@ class LoginController {
             val loader = FXMLLoader(javaClass.getResource("/fxml/dashboard.fxml"))
             val root = loader.load<Any>()
 
+            // MAXIMIZAR DIRECTAMENTE
             stage.scene = Scene(root as javafx.scene.Parent, 1200.0, 700.0)
             stage.isMaximized = true
             stage.title = "Panel de Gestión - Biblioteca IES San Clemente"

@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="49ffc60e-8931-44b1-a3ef-7640586ee9cf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/imagenes/rgb(70, 141, 174)_SIN.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/CatalogoController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/controller/CatalogoController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/model/Libro.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/kotlin/model/Libro.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/catalogo.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/src/main/resources/fxml/catalogo.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" beforeDir="false" afterPath="$PROJECT_DIR$/../Biblioteca_IESSanClemente/biblioteca.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,10 +42,14 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/txusk/Desktop/Biblioteca_IESSanClemente/src/main/resources/imagenes",
     "onboarding.tips.debug.path": "C:/Users/txusk/Desktop/Biblioteca_IESSanClemente/src/main/kotlin/Main.kt"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\txusk\Desktop\Biblioteca_IESSanClemente\src\main\resources\imagenes" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\txusk\Desktop\Biblioteca_IESSanClemente\src\main\kotlin\view" />
     </key>

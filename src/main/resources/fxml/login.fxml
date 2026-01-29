@@ -2,29 +2,34 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx"
+<HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.LoginController"
       style="-fx-background-color: white;"
-      stylesheets="@../css/estilos.css">
+      stylesheets="@../css/estilos.css"
+      prefHeight="600" prefWidth="900">
 
     <!-- Panel izquierdo azul -->
-    <VBox alignment="CENTER" prefWidth="300" style="-fx-background-color: #1976D2;">
+    <VBox alignment="CENTER" prefWidth="350" style="-fx-background-color: #1976D2;">
+        <HBox.hgrow>
+            <Priority fx:constant="NEVER"/>
+        </HBox.hgrow>
+
         <VBox alignment="CENTER" spacing="20">
-            <StackPane>
-                <ImageView fitHeight="120" fitWidth="120" preserveRatio="true"/>
-            </StackPane>
+            <!-- IMAGEN DEL IES SAN CLEMENTE -->
+            <ImageView fitHeight="120" fitWidth="120" preserveRatio="true">
+                <Image url="@../imagenes/rgb(70, 141, 174)_SIN.png"/>
+            </ImageView>
 
             <Label text="IES" textFill="WHITE">
                 <font>
@@ -46,20 +51,17 @@
         </VBox>
     </VBox>
 
-    <!-- Panel derecho blanco -->
-    <VBox alignment="CENTER" prefWidth="600" spacing="30" style="-fx-background-color: #F5F5F5;">
+    <!-- Panel derecho blanco (SE EXPANDE) -->
+    <VBox alignment="CENTER" spacing="30" style="-fx-background-color: #F5F5F5;">
+        <HBox.hgrow>
+            <Priority fx:constant="ALWAYS"/>
+        </HBox.hgrow>
+
         <padding>
             <Insets bottom="50" left="80" right="80" top="50" />
         </padding>
 
-        <StackPane>
-            <Circle fill="#0288D1" radius="60" />
-            <Label text="IES San Clemente" textFill="WHITE">
-                <font>
-                    <Font name="System" size="12" />
-                </font>
-            </Label>
-        </StackPane>
+        <!-- CÍRCULO AZUL ELIMINADO -->
 
         <Label text="Bienvenido/a de nuevo">
             <font>
@@ -89,12 +91,6 @@
                 <Insets top="-10" />
             </VBox.margin>
         </PasswordField>
-
-<!--        <Hyperlink style="-fx-text-fill: #757575; -fx-font-size: 13;" text="Olvidé mi contraseña">-->
-<!--            <VBox.margin>-->
-<!--                <Insets top="-15" />-->
-<!--            </VBox.margin>-->
-<!--        </Hyperlink>-->
 
         <Button fx:id="btnLogin" maxWidth="Infinity" prefHeight="50"
                 onAction="#handleLogin"
