@@ -139,10 +139,10 @@ class DashboardController {
         if (conn != null) {
             try {
                 val sql = """
-                    SELECT estado, COUNT(*) as cantidad 
-                    FROM ejemplares 
-                    GROUP BY estado
-                """
+                SELECT estado, COUNT(*) as cantidad 
+                FROM ejemplares 
+                GROUP BY estado
+            """
                 val rs = conn.createStatement().executeQuery(sql)
 
                 var disponibles = 0
@@ -179,14 +179,14 @@ class DashboardController {
         if (conn != null) {
             try {
                 val sql = """
-                    SELECT l.titulo, COUNT(p.id) as total_prestamos
-                    FROM prestamos p
-                    JOIN ejemplares e ON p.ejemplar_id = e.id
-                    JOIN libros l ON e.libro_id = l.id
-                    GROUP BY l.id, l.titulo
-                    ORDER BY total_prestamos DESC
-                    LIMIT 5
-                """
+                SELECT l.titulo, COUNT(p.id) as total_prestamos
+                FROM prestamos p
+                JOIN ejemplares e ON p.ejemplar_id = e.id
+                JOIN libros l ON e.libro_id = l.id
+                GROUP BY l.id, l.titulo
+                ORDER BY total_prestamos DESC
+                LIMIT 5
+            """
                 val rs = conn.createStatement().executeQuery(sql)
 
                 val series = XYChart.Series<String, Number>()
@@ -209,8 +209,21 @@ class DashboardController {
                 barChartTop5.data.add(series)
                 barChartTop5.setLegendVisible(false)
 
+                // APLICAR COLOR AZUL A TODAS LAS BARRAS
+                barChartTop5.applyCss()
+                barChartTop5.layout()
+
+                javafx.application.Platform.runLater {
+                    // Buscar TODAS las barras y aplicar el color
+                    val allBars = barChartTop5.lookupAll(".chart-bar")
+                    allBars.forEach { bar ->
+                        bar.style = "-fx-bar-fill: rgba(38, 84, 124, 1);"
+                    }
+                }
+
             } catch (e: Exception) {
                 println("Error cargando gráfica top 5: ${e.message}")
+                e.printStackTrace()
             }
         }
     }

@@ -13,7 +13,7 @@ class Main : Application() {
         gestor.iniciarSistema()
 
         // CARGAR LOGIN
-        val loader = FXMLLoader(javaClass.getResource("/fxml/login.fxml"))
+        val loader = FXMLLoader(javaClass.getResource("/fxml/dashboard.fxml"))
         val root = loader.load<Any>()
 
         stage.scene = Scene(root as javafx.scene.Parent, 900.0, 600.0)

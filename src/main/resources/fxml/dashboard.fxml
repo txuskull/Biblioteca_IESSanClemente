@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -22,27 +24,37 @@
             prefHeight="700" prefWidth="1200">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="15"
-              style="-fx-background-color: #1976D2;"
-              prefHeight="70">
+        <!-- CABECERA 80px CON ALINEACIÓN VERTICAL CENTRADA -->
+        <HBox spacing="20" alignment="CENTER"
+              style="-fx-background-color: rgba(70, 141, 174, 1);"
+              prefHeight="80">
             <padding>
-                <Insets left="20" right="20"/>
+                <Insets left="30" right="30"/>
             </padding>
 
-            <Label text="📚" style="-fx-font-size: 30;"/>
+            <!-- ESPACIO IZQUIERDO FLEXIBLE -->
+            <Region HBox.hgrow="ALWAYS"/>
 
+            <!-- IMAGEN PEQUEÑA CENTRADA VERTICALMENTE -->
+            <ImageView fitHeight="62" fitWidth="60" preserveRatio="true">
+                <Image url="@../imagenes/rgb(70, 141, 174)_SIN.png"/>
+            </ImageView>
+
+            <!-- TÍTULO CENTRADO VERTICALMENTE -->
             <Label text="Gestión de Biblioteca" textFill="WHITE">
                 <font>
-                    <Font name="System Bold" size="24"/>
+                    <Font name="System Bold" size="28"/>
                 </font>
             </Label>
 
+            <!-- ESPACIO DERECHO FLEXIBLE -->
             <Region HBox.hgrow="ALWAYS"/>
 
+            <!-- BOTÓN CERRAR SESIÓN CENTRADO VERTICALMENTE -->
             <Button fx:id="btnCerrarSesion" text="Cerrar Sesión"
                     onAction="#handleCerrarSesion"
                     styleClass="boton-cerrar"
-                    prefHeight="35" prefWidth="120"/>
+                    prefHeight="35" prefWidth="130"/>
         </HBox>
     </top>
 
@@ -100,9 +112,8 @@
                 </Button>
             </VBox>
 
-            <!-- Contenedor principal con scroll vertical.
-            fitToWidth=true hace que el contenido se ajuste al ancho -->
-            <ScrollPane fitToWidth="true" style="-fx-background: #F5F5F5;" HBox.hgrow="ALWAYS">
+            <!-- Contenedor principal con scroll vertical -->
+            <ScrollPane fitToWidth="true" style="-fx-background: rgba(239, 239, 239, 1);" HBox.hgrow="ALWAYS">
 
                 <!-- Contenedor vertical principal de todo el dashboard -->
                 <VBox spacing="30">
@@ -130,7 +141,7 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta cyan: Total Ejemplares -->
+                        <!-- Tarjeta violeta: Total Ejemplares -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               styleClass="card-base, card-violeta">
@@ -146,7 +157,7 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta verde: Prestamos -->
+                        <!-- Tarjeta naranja: Prestamos -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               styleClass="card-base, card-naranja">
@@ -165,7 +176,7 @@
 
                     <!-- FILA 2: 3 tarjetas -->
                     <HBox spacing="20">
-                        <!-- Tarjeta rosa: Usuarios -->
+                        <!-- Tarjeta rojo: Usuarios -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               styleClass="card-base, card-rojo">
@@ -181,7 +192,7 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta roja: Sanciones -->
+                        <!-- Tarjeta oliva: Sanciones -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               styleClass="card-base, card-oliva">
@@ -197,7 +208,7 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta morada: Libro Más Prestado -->
+                        <!-- Tarjeta acero: Libro Más Prestado -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
                               styleClass="card-base, card-acero">
@@ -222,19 +233,16 @@
                               style="-fx-background-color: white; -fx-background-radius: 10;
                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
 
-                            <!-- Márgenes internos -->
                             <padding>
                                 <Insets top="20" right="20" bottom="20" left="20"/>
                             </padding>
 
-                            <!-- Título del gráfico -->
                             <Label text="Disponibilidad de Ejemplares">
                                 <font>
                                     <Font name="System Bold" size="18"/>
                                 </font>
                             </Label>
 
-                            <!-- Gráfico circular de disponibilidad -->
                             <PieChart fx:id="pieChartDisponibilidad"
                                       prefHeight="320"
                                       VBox.vgrow="ALWAYS"/>
@@ -245,29 +253,24 @@
                               style="-fx-background-color: white; -fx-background-radius: 10;
                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
 
-                            <!-- Márgenes internos -->
                             <padding>
                                 <Insets top="20" right="20" bottom="20" left="20"/>
                             </padding>
 
-                            <!-- Título del gráfico -->
                             <Label text="Top 5 Libros Mas Prestados">
                                 <font>
                                     <Font name="System Bold" size="18"/>
                                 </font>
                             </Label>
 
-                            <!-- Gráfico de barras -->
                             <BarChart fx:id="barChartTop5"
                                       prefHeight="320"
                                       VBox.vgrow="ALWAYS">
 
-                                <!-- Eje X: nombres de libros -->
                                 <xAxis>
                                     <CategoryAxis side="BOTTOM" label="Libros"/>
                                 </xAxis>
 
-                                <!-- Eje Y: número de préstamos -->
                                 <yAxis>
                                     <NumberAxis side="LEFT" label="Prestamos"/>
                                 </yAxis>
