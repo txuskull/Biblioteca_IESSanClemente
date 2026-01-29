@@ -60,7 +60,7 @@
 
     <center>
         <HBox>
-            <VBox spacing="5" prefWidth="250"
+            <VBox spacing="20" minWidth="200" prefWidth="200" maxWidth="200"
                   style="-fx-background-color: #FAFAFA; -fx-border-color: #E0E0E0; -fx-border-width: 0 1 0 0;">
                 <padding>
                     <Insets top="30" left="20" right="20"/>
@@ -68,7 +68,7 @@
 
                 <Label text="MENU PRINCIPAL" textFill="#9E9E9E">
                     <font>
-                        <Font name="System Bold" size="11"/>
+                        <Font name="System Bold" size="20"/>
                     </font>
                     <VBox.margin>
                         <Insets bottom="20"/>
@@ -76,7 +76,7 @@
                 </Label>
 
                 <Button fx:id="btnCatalogo" text="📚  Catalogo"
-                        maxWidth="Infinity" prefHeight="50"
+                        maxWidth="Infinity" prefHeight="60"
                         onAction="#handleCatalogo"
                         styleClass="boton-menu">
                     <padding>
@@ -85,7 +85,7 @@
                 </Button>
 
                 <Button fx:id="btnUsuarios" text="👥  Usuarios"
-                        maxWidth="Infinity" prefHeight="50"
+                        maxWidth="Infinity" prefHeight="60"
                         onAction="#handleUsuarios"
                         styleClass="boton-menu">
                     <padding>
@@ -94,7 +94,7 @@
                 </Button>
 
                 <Button fx:id="btnPrestamos" text="💰  Prestamos"
-                        maxWidth="Infinity" prefHeight="50"
+                        maxWidth="Infinity" prefHeight="60"
                         onAction="#handlePrestamos"
                         styleClass="boton-menu">
                     <padding>
@@ -103,7 +103,7 @@
                 </Button>
 
                 <Button fx:id="btnSanciones" text="🔨  Sanciones"
-                        maxWidth="Infinity" prefHeight="50"
+                        maxWidth="Infinity" prefHeight="60"
                         onAction="#handleSanciones"
                         styleClass="boton-menu">
                     <padding>

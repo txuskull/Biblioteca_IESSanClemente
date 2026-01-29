@@ -21,9 +21,11 @@
 .boton-menu {
     -fx-background-color: transparent;
     -fx-text-fill: #424242;
-    -fx-font-size: 14px;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
     -fx-alignment: CENTER_LEFT;
     -fx-cursor: hand;
+    -fx-padding: 20 0 20 25;
 }
 
 .boton-menu:hover {
@@ -93,14 +95,14 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 1);
 }
 
-/* TODAS LAS TARJETAS DEL MISMO COLOR */
+/* TODAS LAS TARJETAS - Color intermedio entre cabecera y botón */
 .card-azul,
 .card-violeta,
 .card-naranja,
 .card-rojo,
 .card-oliva,
 .card-acero {
-    -fx-background-color: rgba(76, 83, 185, 1);
+    -fx-background-color: rgba(135, 166, 206, 1); /* Azul intermedio */
 }
 
 /* ==================================================================
