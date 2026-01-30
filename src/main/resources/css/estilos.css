@@ -59,33 +59,6 @@
     -fx-background-color: rgba(25, 55, 82, 1);
 }
 
-/* BOTÓN VERDE (Añadir, Crear) */
-.boton-verde {
-    -fx-background-color: #00BF38;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
-
-.boton-verde:hover {
-    -fx-background-color: #00992d;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
-}
-
-/* BOTÓN ROJO (Borrar, Eliminar) */
-.boton-rojo {
-    -fx-background-color: #D32F2F;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
-
-.boton-rojo:hover {
-    -fx-background-color: #B71C1C;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
-}
 
 /* ==================================================================
    3. TARJETAS DEL DASHBOARD
@@ -96,12 +69,7 @@
 }
 
 /* TODAS LAS TARJETAS - Color intermedio entre cabecera y botón */
-.card-azul,
-.card-violeta,
-.card-naranja,
-.card-rojo,
-.card-oliva,
-.card-acero {
+.card-azul {
     -fx-background-color: rgba(135, 166, 206, 1); /* Azul intermedio */
 }
 

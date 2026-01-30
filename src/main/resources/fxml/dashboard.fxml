@@ -141,10 +141,10 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta violeta: Total Ejemplares -->
+                        <!-- Tarjeta Total Ejemplares -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              styleClass="card-base, card-violeta">
+                              styleClass="card-base, card-azul">
                             <Label fx:id="lblTotalEjemplares" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -157,10 +157,10 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta naranja: Prestamos -->
+                        <!-- Tarjeta  Prestamos -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              styleClass="card-base, card-naranja">
+                              styleClass="card-base, card-azul">
                             <Label fx:id="lblPrestamosTotales" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -176,10 +176,10 @@
 
                     <!-- FILA 2: 3 tarjetas -->
                     <HBox spacing="20">
-                        <!-- Tarjeta rojo: Usuarios -->
+                        <!-- Tarjeta  Usuarios -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              styleClass="card-base, card-rojo">
+                              styleClass="card-base, card-azul">
                             <Label fx:id="lblUsuarios" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -192,10 +192,10 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta oliva: Sanciones -->
+                        <!-- Tarjeta Sanciones -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              styleClass="card-base, card-oliva">
+                              styleClass="card-base, card-azul">
                             <Label fx:id="lblSancionesActivas" text="0" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="48"/>
@@ -208,10 +208,10 @@
                             </Label>
                         </VBox>
 
-                        <!-- Tarjeta acero: Libro Más Prestado -->
+                        <!-- Tarjeta Libro Más Prestado -->
                         <VBox alignment="CENTER" spacing="10" prefWidth="340" prefHeight="120"
                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
-                              styleClass="card-base, card-acero">
+                              styleClass="card-base, card-azul">
                             <Label fx:id="lblLibroTop" text="—" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="20"/>
