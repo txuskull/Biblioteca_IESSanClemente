@@ -23,21 +23,21 @@
             stylesheets="@../css/estilos.css">
 
     <top>
-        <StackPane style="-fx-background-color: #3579be;" prefHeight="110">
+        <!-- CABECERA 80px - CENTRADA -->
+        <HBox spacing="20" alignment="CENTER"
+              style="-fx-background-color: rgba(70, 141, 174, 1);"
+              prefHeight="80">
             <padding>
-                <Insets top="15" right="30" bottom="15" left="30"/>
+                <Insets left="30" right="30"/>
             </padding>
 
-            <HBox alignment="CENTER_LEFT">
-                <ImageView fitHeight="150" fitWidth="150" preserveRatio="true"/>
-            </HBox>
-
+            <!-- TÍTULO -->
             <Label text="Aplicar Sancion Manual" textFill="WHITE">
                 <font>
-                    <Font name="Arial Bold" size="28"/>
+                    <Font name="System Bold" size="28"/>
                 </font>
             </Label>
-        </StackPane>
+        </HBox>
     </top>
 
     <center>
