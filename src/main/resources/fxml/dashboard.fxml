@@ -32,6 +32,9 @@
                 <Insets left="30" right="30"/>
             </padding>
 
+            <!-- ESPACIO INVISIBLE DEL MISMO TAMAÑO QUE EL BOTÓN (para equilibrar) -->
+            <Region prefWidth="130" prefHeight="35"/>
+
             <!-- ESPACIO IZQUIERDO FLEXIBLE -->
             <Region HBox.hgrow="ALWAYS"/>
 
@@ -41,9 +44,9 @@
             </ImageView>
 
             <!-- TÍTULO CENTRADO VERTICALMENTE -->
-            <Label text="Gestión de Biblioteca" textFill="WHITE">
+            <Label text="Panel Principal" textFill="WHITE">
                 <font>
-                    <Font name="System Bold" size="28"/>
+                    <Font name="System Bold" size="35"/>
                 </font>
             </Label>
 
@@ -55,6 +58,8 @@
                     onAction="#handleCerrarSesion"
                     styleClass="boton-cerrar"
                     prefHeight="35" prefWidth="130"/>
+
+
         </HBox>
     </top>
 
@@ -68,7 +73,7 @@
 
                 <Label text="MENU PRINCIPAL" textFill="#9E9E9E">
                     <font>
-                        <Font name="System Bold" size="20"/>
+                        <Font name="System Bold" size="18"/>
                     </font>
                     <VBox.margin>
                         <Insets bottom="20"/>

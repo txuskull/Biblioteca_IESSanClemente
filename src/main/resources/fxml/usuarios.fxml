@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.UsuariosController"
@@ -20,27 +22,41 @@
             style="-fx-background-color: white;">
 
     <top>
-        <StackPane style="-fx-background-color: #3579be;" prefHeight="110">
+        <!-- CABECERA 80px -->
+        <HBox spacing="20" alignment="CENTER"
+              style="-fx-background-color: rgba(70, 141, 174, 1);"
+              prefHeight="80">
             <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
+                <Insets left="30" right="30"/>
             </padding>
 
-            <HBox spacing="15" alignment="CENTER">
-                <ImageView fitHeight="80" fitWidth="80" preserveRatio="true"/>
+            <!-- BOTÓN VOLVER A LA IZQUIERDA -->
+            <Button fx:id="btnVolver" text="Volver"
+                    onAction="#handleVolver"
+                    styleClass="boton-cerrar"
+                    prefHeight="30" prefWidth="90"/>
 
-                <Label text="Directorio de Usuarios" textFill="WHITE">
-                    <font>
-                        <Font name="Arial Bold" size="24"/>
-                    </font>
-                </Label>
-            </HBox>
+            <!-- ESPACIO FLEXIBLE IZQUIERDO -->
+            <Region HBox.hgrow="ALWAYS"/>
 
-            <HBox alignment="CENTER_LEFT" pickOnBounds="false">
-                <Button fx:id="btnVolver" text="Volver"
-                        onAction="#handleVolver"
-                        styleClass="boton-cerrar"/>
-            </HBox>
-        </StackPane>
+            <!-- IMAGEN PEQUEÑA CENTRADA VERTICALMENTE -->
+            <ImageView fitHeight="62" fitWidth="60" preserveRatio="true">
+                <Image url="@../imagenes/rgb(70, 141, 174)_SIN.png"/>
+            </ImageView>
+
+            <!-- TÍTULO CENTRADO VERTICALMENTE -->
+            <Label text="Directorio de Usuarios" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="32"/>
+                </font>
+            </Label>
+
+            <!-- ESPACIO FLEXIBLE DERECHO -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- ESPACIO INVISIBLE DEL MISMO TAMAÑO QUE EL BOTÓN (para equilibrar) -->
+            <Region prefWidth="90" prefHeight="30"/>
+        </HBox>
     </top>
 
     <center>
