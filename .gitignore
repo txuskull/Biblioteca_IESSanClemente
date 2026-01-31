@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# IntelliJ workspace (se modifica solo)
+.idea/workspace.xml
+
+# Base de datos local (SQLite)
+*.db
