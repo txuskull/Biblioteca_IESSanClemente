@@ -71,7 +71,7 @@
             <TextField fx:id="txtBuscar"
                        promptText="Buscar por titulo, autor o ISBN..."
                        prefHeight="40"
-                       maxWidth="500"/>
+                       maxWidth="Infinity"/>
 
             <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
                 <columns>

@@ -2,6 +2,7 @@ package controller
 
 import database.GestorBaseDatos
 import javafx.collections.FXCollections
+import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -22,12 +23,29 @@ class SancionesController {
     @FXML private lateinit var colEstado: TableColumn<Sancion, String>
     @FXML private lateinit var btnManual: Button
     @FXML private lateinit var btnBorrar: Button
+    @FXML private lateinit var txtBuscar: TextField
 
     @FXML
     fun initialize() {
         actualizarSancionesVencidas()
         configurarColumnas()
-        tabla.items = cargarSanciones()
+
+        val listaSanciones = FXCollections.observableArrayList<Sancion>()
+        listaSanciones.setAll(cargarSanciones())
+        val listaFiltrada = FilteredList(listaSanciones) { true }
+        tabla.items = listaFiltrada
+
+        // BÚSQUEDA EN TIEMPO REAL
+        txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
+            listaFiltrada.setPredicate { sancion ->
+                if (nuevoTexto.isNullOrEmpty()) true
+                else {
+                    val lower = nuevoTexto.lowercase()
+                    sancion.nombreUsuario.lowercase().contains(lower) ||
+                            sancion.motivo.lowercase().contains(lower)
+                }
+            }
+        }
     }
 
     private fun configurarColumnas() {
@@ -74,7 +92,11 @@ class SancionesController {
             val resp = alerta.showAndWait()
             if (resp.isPresent && resp.get() == ButtonType.OK) {
                 borrarSancion(seleccion.id)
-                tabla.items = cargarSanciones()
+                // Recargar tabla
+                val nuevaLista = cargarSanciones()
+                (tabla.items as? FilteredList<Sancion>)?.let { filtrada ->
+                    (filtrada.source as? javafx.collections.ObservableList<Sancion>)?.setAll(nuevaLista)
+                }
             }
         } else {
             val alerta = Alert(Alert.AlertType.WARNING)

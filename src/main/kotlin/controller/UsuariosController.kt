@@ -2,6 +2,7 @@ package controller
 
 import database.GestorBaseDatos
 import javafx.collections.FXCollections
+import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -13,15 +14,35 @@ import model.Usuario
 class UsuariosController {
 
     @FXML private lateinit var btnVolver: Button
+    @FXML private lateinit var txtBuscar: TextField
     @FXML private lateinit var tabla: TableView<Usuario>
     @FXML private lateinit var btnNuevo: Button
     @FXML private lateinit var btnEditar: Button
     @FXML private lateinit var btnBorrar: Button
 
+    private val listaUsuarios = FXCollections.observableArrayList<Usuario>()
+    private lateinit var listaFiltrada: FilteredList<Usuario>
+
     @FXML
     fun initialize() {
         configurarColumnas()
-        tabla.items = cargarUsuarios()
+
+        listaUsuarios.setAll(cargarUsuarios())
+        listaFiltrada = FilteredList(listaUsuarios) { true }
+        tabla.items = listaFiltrada
+
+        // BÚSQUEDA EN TIEMPO REAL
+        txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
+            listaFiltrada.setPredicate { usuario ->
+                if (nuevoTexto.isNullOrEmpty()) true
+                else {
+                    val lower = nuevoTexto.lowercase()
+                    usuario.nombre.lowercase().contains(lower) ||
+                            usuario.dni.lowercase().contains(lower) ||
+                            usuario.email.lowercase().contains(lower)
+                }
+            }
+        }
     }
 
     private fun configurarColumnas() {
@@ -80,39 +101,35 @@ class UsuariosController {
             val respuesta = alerta.showAndWait()
             if (respuesta.isPresent && respuesta.get() == ButtonType.OK) {
                 borrarUsuario(usuarioSeleccionado.id)
-                tabla.items = cargarUsuarios()
+                listaUsuarios.setAll(cargarUsuarios())
             }
         } else {
             mostrarAlerta("Atencion", "Debes seleccionar un usuario.", Alert.AlertType.WARNING)
         }
     }
 
-    private fun cargarUsuarios(): javafx.collections.ObservableList<Usuario> {
-        val lista = FXCollections.observableArrayList<Usuario>()
+    private fun cargarUsuarios(): List<Usuario> {
+        val lista = mutableListOf<Usuario>()
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
                 val rs = conn.createStatement().executeQuery("SELECT * FROM usuarios")
                 while (rs.next()) {
-                    // 1. Leemos el tipo como texto de la base de datos
                     val tipoTexto = rs.getString("tipo")
-
-                    // 2. Lo convertimos al Enum (protegemos si viene vacio o mal escrito)
                     val tipoEnum = try {
                         model.TipoUsuario.valueOf(tipoTexto)
                     } catch (e: Exception) {
-                        model.TipoUsuario.ESTUDIANTE // Si falla, ponemos ESTUDIANTE por defecto
+                        model.TipoUsuario.ESTUDIANTE
                     }
 
-                    // 3. Creamos el Usuario con los 6 campos exactos del modelo
                     lista.add(model.Usuario(
-                        rs.getInt("id"),                     // 1. ID
-                        rs.getString("dni"),                 // 2. DNI
-                        rs.getString("nombre"),              // 3. Nombre
-                        tipoEnum,                            // 4. Tipo (Enum)
-                        rs.getString("email") ?: "",         // 5. Email
-                        rs.getString("sancionado_hasta")     // 6. Sancion (puede ser null)
+                        rs.getInt("id"),
+                        rs.getString("dni"),
+                        rs.getString("nombre"),
+                        tipoEnum,
+                        rs.getString("email") ?: "",
+                        rs.getString("sancionado_hasta")
                     ))
                 }
                 conn.close()

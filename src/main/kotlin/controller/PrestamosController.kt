@@ -2,6 +2,7 @@ package controller
 
 import database.GestorBaseDatos
 import javafx.collections.FXCollections
+import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -24,11 +25,29 @@ class PrestamosController {
     @FXML private lateinit var colEstado: TableColumn<Prestamo, String>
     @FXML private lateinit var btnNuevo: Button
     @FXML private lateinit var btnDevolver: Button
+    @FXML private lateinit var txtBuscar: TextField
 
     @FXML
     fun initialize() {
         configurarColumnas()
-        tabla.items = cargarPrestamos()
+
+        val listaPrestamos = FXCollections.observableArrayList<Prestamo>()
+        listaPrestamos.setAll(cargarPrestamos())
+        val listaFiltrada = FilteredList(listaPrestamos) { true }
+        tabla.items = listaFiltrada
+
+        // BÚSQUEDA EN TIEMPO REAL
+        txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
+            listaFiltrada.setPredicate { prestamo ->
+                if (nuevoTexto.isNullOrEmpty()) true
+                else {
+                    val lower = nuevoTexto.lowercase()
+                    prestamo.nombreUsuario.lowercase().contains(lower) ||
+                            prestamo.tituloLibro.lowercase().contains(lower) ||
+                            prestamo.fechaPrestamo.contains(nuevoTexto)
+                }
+            }
+        }
     }
 
     private fun configurarColumnas() {
@@ -65,12 +84,17 @@ class PrestamosController {
         navegarA("/fxml/prestamo_form.fxml", "Nuevo Préstamo")
     }
 
+
     @FXML
     fun handleDevolver() {
         val seleccionado = tabla.selectionModel.selectedItem
         if (seleccionado != null && seleccionado.estado == "ACTIVO") {
             confirmarDevolucion(seleccionado)
-            tabla.items = cargarPrestamos()
+            // Recargar tabla
+            val nuevaLista = cargarPrestamos()
+            (tabla.items as? FilteredList<Prestamo>)?.let { filtrada ->
+                (filtrada.source as? javafx.collections.ObservableList<Prestamo>)?.setAll(nuevaLista)
+            }
         } else if (seleccionado != null && seleccionado.estado == "DEVUELTO") {
             val alerta = Alert(Alert.AlertType.INFORMATION)
             alerta.contentText = "Este libro ya ha sido devuelto."
@@ -80,8 +104,6 @@ class PrestamosController {
             alerta.contentText = "Selecciona un préstamo activo."
             alerta.showAndWait()
         }
-
-
     }
 
     private fun cargarPrestamos(): javafx.collections.ObservableList<Prestamo> {

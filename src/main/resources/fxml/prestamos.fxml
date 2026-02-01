@@ -14,6 +14,7 @@
 
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TextField?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.PrestamosController"
@@ -30,40 +31,46 @@
                 <Insets left="30" right="30"/>
             </padding>
 
-            <!-- BOTÓN VOLVER A LA IZQUIERDA -->
-            <Button fx:id="btnVolver" text="Volver"
+            <!-- BOTÓN VOLVER BLANCO -->
+            <Button fx:id="btnVolver" text="← Volver"
                     onAction="#handleVolver"
-                    styleClass="boton-cerrar"
-                    prefHeight="30" prefWidth="90"/>
+                    styleClass="boton-volver-header"
+                    prefHeight="35" prefWidth="100"/>
 
             <!-- ESPACIO FLEXIBLE IZQUIERDO -->
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- IMAGEN PEQUEÑA CENTRADA VERTICALMENTE -->
+            <!-- IMAGEN PEQUEÑA -->
             <ImageView fitHeight="62" fitWidth="60" preserveRatio="true">
                 <Image url="@../imagenes/rgb(70, 141, 174)_SIN.png"/>
             </ImageView>
 
-            <!-- TÍTULO CENTRADO VERTICALMENTE -->
+            <!-- TÍTULO -->
             <Label text="Control de Préstamos" textFill="WHITE">
                 <font>
-                    <Font name="System Bold" size="32"/>
+                    <Font name="System Bold" size="28"/>
                 </font>
             </Label>
 
             <!-- ESPACIO FLEXIBLE DERECHO -->
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- ESPACIO INVISIBLE DEL MISMO TAMAÑO QUE EL BOTÓN (para equilibrar) -->
-            <Region prefWidth="90" prefHeight="30"/>
+            <!-- ESPACIO INVISIBLE (equilibrio) -->
+            <Region prefWidth="100" prefHeight="35"/>
         </HBox>
     </top>
 
     <center>
-        <VBox>
+        <VBox spacing="15">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
+
+            <!-- BUSCADOR -->
+            <TextField fx:id="txtBuscar"
+                       promptText="Buscar por usuario, libro o fecha..."
+                       prefHeight="40"
+                       maxWidth="Infinity"/>
 
             <TableView fx:id="tabla" VBox.vgrow="ALWAYS">
                 <columns>
@@ -79,19 +86,24 @@
     </center>
 
     <bottom>
-        <HBox spacing="15" alignment="CENTER"
-              style="-fx-background-color: #f4f4f4;">
+        <HBox spacing="20" alignment="CENTER">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
             <Button fx:id="btnNuevo" text="Realizar Préstamo"
+                    prefWidth="160" prefHeight="40"
                     onAction="#handleNuevo"
-                    styleClass="boton-cerrar"/>
+                    styleClass="boton-nuevo">
+                <font><Font name="System Bold" size="13"/></font>
+            </Button>
 
             <Button fx:id="btnDevolver" text="Registrar Devolución"
+                    prefWidth="170" prefHeight="40"
                     onAction="#handleDevolver"
-                    styleClass="boton-cerrar"/>
+                    styleClass="boton-secundario">
+                <font><Font name="System Bold" size="13"/></font>
+            </Button>
         </HBox>
     </bottom>
 </BorderPane>
