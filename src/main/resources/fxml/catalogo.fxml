@@ -6,15 +6,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.CatalogoController"
@@ -31,11 +30,11 @@
                 <Insets left="30" right="30"/>
             </padding>
 
-            <!-- BOTÓN VOLVER -->
-            <Button fx:id="btnVolver" text="Volver"
+            <!-- BOTÓN VOLVER BLANCO -->
+            <Button fx:id="btnVolver" text="← Volver"
                     onAction="#handleVolver"
-                    styleClass="boton-cerrar"
-                    prefHeight="30" prefWidth="90"/>
+                    styleClass="boton-volver-header"
+                    prefHeight="35" prefWidth="100"/>
 
             <!-- ESPACIO IZQUIERDO FLEXIBLE -->
             <Region HBox.hgrow="ALWAYS"/>
@@ -48,17 +47,15 @@
             <!-- TÍTULO CENTRADO VERTICALMENTE -->
             <Label text="Catálogo de Libros" textFill="WHITE">
                 <font>
-                    <Font name="System Bold" size="32"/>
+                    <Font name="System Bold" size="28"/>
                 </font>
             </Label>
 
             <!-- ESPACIO DERECHO FLEXIBLE -->
             <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- ESPACIO INVISIBLE DEL MISMO TAMAÑO QUE EL BOTÓN (para equilibrar) -->
-            <Region prefWidth="90" prefHeight="30"/>
-
-
+            <!-- ESPACIO INVISIBLE (equilibrio) -->
+            <Region prefWidth="100" prefHeight="35"/>
         </HBox>
     </top>
 
@@ -68,6 +65,7 @@
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
+            <!-- BUSCADOR -->
             <TextField fx:id="txtBuscar"
                        promptText="Buscar por titulo, autor o ISBN..."
                        prefHeight="40"
@@ -82,30 +80,37 @@
                     <TableColumn text="Tipo" prefWidth="80"/>
                     <TableColumn text="Autor" prefWidth="130"/>
                     <TableColumn text="Editorial" prefWidth="120"/>
-
                 </columns>
             </TableView>
         </VBox>
     </center>
 
     <bottom>
-        <HBox spacing="15" alignment="CENTER"
-              style="-fx-background-color: #f4f4f4;">
+        <HBox spacing="20" alignment="CENTER">
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
             <Button fx:id="btnNuevo" text="Nuevo Libro"
+                    prefWidth="140" prefHeight="40"
                     onAction="#handleNuevo"
-                    styleClass="boton-cerrar"/>
+                    styleClass="boton-nuevo">
+                <font><Font name="System Bold" size="13"/></font>
+            </Button>
 
             <Button fx:id="btnEditar" text="Editar Seleccionado"
+                    prefWidth="160" prefHeight="40"
                     onAction="#handleEditar"
-                    styleClass="boton-cerrar"/>
+                    styleClass="boton-secundario">
+                <font><Font name="System Bold" size="13"/></font>
+            </Button>
 
             <Button fx:id="btnBorrar" text="Borrar Libro"
+                    prefWidth="140" prefHeight="40"
                     onAction="#handleBorrar"
-                    styleClass="boton-cerrar"/>
+                    styleClass="boton-eliminar">
+                <font><Font name="System Bold" size="13"/></font>
+            </Button>
         </HBox>
     </bottom>
 </BorderPane>

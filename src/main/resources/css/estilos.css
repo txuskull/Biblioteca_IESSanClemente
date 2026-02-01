@@ -6,13 +6,11 @@
    BOTONES:    rgba(38, 84, 124, 1)   -> #26547C (Azul Oscuro)
    FONDO:      rgba(239, 239, 239, 1) -> #EFEFEF (Gris Muy Claro)
 
-   COLORES SECUNDARIOS (Tarjetas):
-   - Azul Principal:   #017BC4
-   - Violeta:          #951B80
-   - Naranja:          #F29200
-   - Rojo-Naranja:     #F4791B
-   - Oliva/Oro:        #8E8001
-   - Verde:            #00BF38
+   BOTONES DE ACCIÓN (Tonos profesionales):
+   - Acción Principal (Nuevo):  rgba(52, 120, 160, 1) -> Azul acero claro
+   - Acción Secundaria (Editar): rgba(38, 84, 124, 1) -> Azul oscuro
+   - Acción Destructiva (Borrar): rgba(140, 75, 75, 1) -> Rojo apagado
+   - Cancelar/Volver:           rgba(120, 120, 120, 1) -> Gris medio
 */
 
 /* ==================================================================
@@ -37,14 +35,63 @@
 }
 
 /* ==================================================================
-   2. BOTONES DE ACCIÓN
+   2. BOTONES DE ACCIÓN (JERARQUÍA VISUAL)
    ================================================================== */
 
-/* BOTÓN PRINCIPAL (Cerrar Sesión, Guardar, Aceptar) */
+/* BOTÓN VOLVER EN CABECERA - Blanco sobre fondo azul */
+.boton-volver-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-volver-header:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-border-color: white;
+    -fx-text-fill: white;
+}
+
+/* BOTÓN ACCIÓN PRINCIPAL (Nuevo, Crear) - Azul acero claro */
+.boton-nuevo {
+    -fx-background-color: rgba(52, 120, 160, 1);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-nuevo:hover {
+    -fx-background-color: rgba(70, 141, 174, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* BOTÓN SECUNDARIO (Editar) - Azul oscuro */
+.boton-secundario {
+    -fx-background-color: rgba(38, 84, 124, 1);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-secundario:hover {
+    -fx-background-color: rgba(70, 141, 174, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 1);
+}
+
+/* BOTÓN CERRAR SESIÓN (mantener aparte para el dashboard) */
 .boton-cerrar {
     -fx-background-color: rgba(38, 84, 124, 1);
     -fx-text-fill: white;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 5;
     -fx-cursor: hand;
@@ -59,6 +106,50 @@
     -fx-background-color: rgba(25, 55, 82, 1);
 }
 
+/* BOTÓN GUARDAR EN FORMULARIOS - Azul oscuro */
+.boton-guardar {
+    -fx-background-color: rgba(38, 84, 124, 1);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-guardar:hover {
+    -fx-background-color: rgba(70, 141, 174, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 1);
+}
+
+/* BOTÓN ELIMINAR (Borrar, Eliminar) - Rojo apagado/marrón */
+.boton-eliminar {
+    -fx-background-color: rgba(140, 75, 75, 1);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-eliminar:hover {
+    -fx-background-color: rgba(165, 90, 90, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+}
+
+/* BOTÓN CANCELAR - Gris medio */
+.boton-cancelar {
+    -fx-background-color: rgba(120, 120, 120, 1);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-cancelar:hover {
+    -fx-background-color: rgba(90, 90, 90, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
 
 /* ==================================================================
    3. TARJETAS DEL DASHBOARD
@@ -70,7 +161,7 @@
 
 /* TODAS LAS TARJETAS - Color intermedio entre cabecera y botón */
 .card-azul {
-    -fx-background-color: rgba(135, 166, 206, 1); /* Azul intermedio */
+    -fx-background-color: rgba(135, 166, 206, 1);
 }
 
 /* ==================================================================
@@ -79,11 +170,11 @@
 
 /* FORZAR COLORES DEL PIE CHART */
 .default-color0.chart-pie {
-    -fx-pie-color: rgba(70, 141, 174, 1); /* Disponibles - Azul Cabecera */
+    -fx-pie-color: rgba(70, 141, 174, 1);
 }
 
 .default-color1.chart-pie {
-    -fx-pie-color: rgba(38, 84, 124, 1); /* Prestados - Azul Botón */
+    -fx-pie-color: rgba(38, 84, 124, 1);
 }
 
 /* FORZAR COLORES DE LA LEYENDA DEL PIE CHART */
