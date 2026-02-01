@@ -109,19 +109,21 @@
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
-            <Button fx:id="btnCancelar" text="CANCELAR" prefWidth="200" prefHeight="45"
+            <Button fx:id="btnCancelar" text="CANCELAR"
+                    prefWidth="180" prefHeight="45"
                     onAction="#handleCancelar"
-                    styleClass="boton-cerrar">
+                    styleClass="boton-cancelar">
                 <font>
-                    <Font name="Arial Bold" size="14"/>
+                    <Font name="System Bold" size="14"/>
                 </font>
             </Button>
 
-            <Button fx:id="btnGuardar" text="REGISTRAR PRESTAMO" prefWidth="200" prefHeight="45"
+            <Button fx:id="btnGuardar" text="GUARDAR CAMBIOS"
+                    prefWidth="180" prefHeight="45"
                     onAction="#handleGuardar"
-                    styleClass="boton-cerrar">
+                    styleClass="boton-guardar">
                 <font>
-                    <Font name="Arial Bold" size="14"/>
+                    <Font name="System Bold" size="14"/>
                 </font>
             </Button>
         </HBox>
