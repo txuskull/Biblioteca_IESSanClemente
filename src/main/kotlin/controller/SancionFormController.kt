@@ -17,24 +17,28 @@ class SancionFormController {
     @FXML private lateinit var btnCancelar: Button
     @FXML private lateinit var btnGuardar: Button
 
+    // clase auxiliar para que en el combo se vea el nombre pero yo guarde el id
     class ComboAlumno(val id: Int, val nombre: String) {
         override fun toString(): String = nombre
     }
 
     @FXML
     fun initialize() {
-        // Configurar spinner
+        // configuro el selector de dias, minimo 1 y maximo 365
         spinnerDias.valueFactory = SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 1)
         spinnerDias.isEditable = true
 
+        // cargo la lista de alumnos al principio
         cargarAlumnos(cmbAlumnos, "")
 
+        // si escribo en el buscador, filtro la lista de alumnos en tiempo real
         txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
             cargarAlumnos(cmbAlumnos, nuevoTexto)
-            cmbAlumnos.show()
+            cmbAlumnos.show() // despliego la lista para facilitar la eleccion
         }
     }
 
+    // volver a la lista anterior sin guardar
     @FXML
     fun handleCancelar() {
         navegarASanciones()
@@ -46,16 +50,19 @@ class SancionFormController {
         val motivo = txtMotivo.text
         val dias = spinnerDias.value
 
+        // validacion basica, elegir a quien y por que
         if (alumno == null || motivo.isBlank()) {
             val alerta = Alert(Alert.AlertType.WARNING)
             alerta.contentText = "Debes elegir un alumno y escribir un motivo."
             alerta.showAndWait()
         } else {
+            // si todo esta bien guardo la sancion
             guardarSancionManual(alumno.id, motivo, dias)
             navegarASanciones()
         }
     }
 
+    // busco en la base de datos a los usuarios para el desplegable
     private fun cargarAlumnos(cmb: ComboBox<ComboAlumno>, filtro: String) {
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
@@ -65,6 +72,8 @@ class SancionFormController {
 
         if (conn != null) {
             try {
+                // solo busco a los que son TIPO ESTUDIANTE
+                // los profesores y conserjes no reciben sanciones de este tipo
                 val sql = "SELECT id, nombre FROM usuarios WHERE tipo = 'ESTUDIANTE' AND nombre LIKE ?"
                 val ps = conn.prepareStatement(sql)
                 ps.setString(1, "%$filtro%")
@@ -75,6 +84,7 @@ class SancionFormController {
                 }
                 conn.close()
 
+                // intento mantener la seleccion si no he filtrado nada raro
                 if (filtro.isEmpty() && seleccionPrevia != null) {
                     cmb.value = seleccionPrevia
                 } else if (cmb.items.isNotEmpty()) {
@@ -87,12 +97,14 @@ class SancionFormController {
         }
     }
 
+    // guardo la sancion en la tabla
     private fun guardarSancionManual(idUsuario: Int, motivo: String, dias: Int) {
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
                 val fechaHoy = LocalDate.now()
+                // calculo la fecha de fin sumando los dias que he puesto en el spinner
                 val fechaFin = fechaHoy.plusDays(dias.toLong())
 
                 val sql = """
@@ -114,6 +126,7 @@ class SancionFormController {
         }
     }
 
+    // funcion para cambiar de pantalla
     private fun navegarASanciones() {
         val stage = btnCancelar.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource("/fxml/sanciones.fxml"))

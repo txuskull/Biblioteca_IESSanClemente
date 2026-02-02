@@ -29,18 +29,23 @@ class PrestamosController {
 
     @FXML
     fun initialize() {
+        // preparo las columnas para que sepan que dato poner
         configurarColumnas()
 
+        // cargo los datos de la base de datos en una lista observable
         val listaPrestamos = FXCollections.observableArrayList<Prestamo>()
         listaPrestamos.setAll(cargarPrestamos())
+
+        // envuelvo la lista en un filtro para poder buscar
         val listaFiltrada = FilteredList(listaPrestamos) { true }
         tabla.items = listaFiltrada
 
-        // BÚSQUEDA EN TIEMPO REAL
+        // busqueda en tiempo real cuando escribo
         txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
             listaFiltrada.setPredicate { prestamo ->
                 if (nuevoTexto.isNullOrEmpty()) true
                 else {
+                    // paso todo a minusculas para ignorar mayusculas/minusculas
                     val lower = nuevoTexto.lowercase()
                     prestamo.nombreUsuario.lowercase().contains(lower) ||
                             prestamo.tituloLibro.lowercase().contains(lower) ||
@@ -51,6 +56,7 @@ class PrestamosController {
     }
 
     private fun configurarColumnas() {
+        // asocio cada columna con el atributo de la clase Prestamo
         colId.cellValueFactory = PropertyValueFactory("id")
         colLibro.cellValueFactory = PropertyValueFactory("tituloLibro")
         colUser.cellValueFactory = PropertyValueFactory("nombreUsuario")
@@ -58,15 +64,18 @@ class PrestamosController {
         colFechaPrevista.cellValueFactory = PropertyValueFactory("fechaDevolucionPrevista")
         colEstado.cellValueFactory = PropertyValueFactory("estado")
 
+        // personalizo la columna de estado para que se vea mas bonita
         colEstado.setCellFactory {
             object : TableCell<Prestamo, String>() {
                 override fun updateItem(item: String?, empty: Boolean) {
                     super.updateItem(item, empty)
                     text = item
                     if (item == "DEVUELTO") {
+                        // verde y negrita si ya esta devuelto
                         textFill = javafx.scene.paint.Color.GREEN
                         style = "-fx-font-weight: bold;"
                     } else if (item == "ACTIVO") {
+                        // azul si aun lo tiene el usuario
                         textFill = javafx.scene.paint.Color.BLUE
                     }
                 }
@@ -85,27 +94,35 @@ class PrestamosController {
     }
 
 
+    // funcion para gestionar la devolucion de un libro
     @FXML
     fun handleDevolver() {
         val seleccionado = tabla.selectionModel.selectedItem
+
+        // solo puedo devolver si esta seleccionado y esta activo
         if (seleccionado != null && seleccionado.estado == "ACTIVO") {
             confirmarDevolucion(seleccionado)
-            // Recargar tabla
+
+            // despues de devolver, recargo la tabla entera para ver los cambios
             val nuevaLista = cargarPrestamos()
+            // actualizar lista filtrada
             (tabla.items as? FilteredList<Prestamo>)?.let { filtrada ->
                 (filtrada.source as? javafx.collections.ObservableList<Prestamo>)?.setAll(nuevaLista)
             }
         } else if (seleccionado != null && seleccionado.estado == "DEVUELTO") {
+            // si ya estaba devuelto aviso al usuario
             val alerta = Alert(Alert.AlertType.INFORMATION)
             alerta.contentText = "Este libro ya ha sido devuelto."
             alerta.showAndWait()
         } else {
+            // si no selecciono nada aviso
             val alerta = Alert(Alert.AlertType.WARNING)
             alerta.contentText = "Selecciona un préstamo activo."
             alerta.showAndWait()
         }
     }
 
+    // consulta sql para traer todos los prestamos con joins para sacar nombres reales
     private fun cargarPrestamos(): javafx.collections.ObservableList<Prestamo> {
         val lista = FXCollections.observableArrayList<Prestamo>()
         val gestor = GestorBaseDatos()
@@ -113,6 +130,7 @@ class PrestamosController {
 
         if (conn != null) {
             try {
+                // uno las tablas prestamos, usuarios, ejemplares y libros
                 val sql = """
                     SELECT p.id, u.nombre as nombre_usuario, l.titulo as titulo_libro, 
                            p.fecha_prestamo, p.fecha_devolucion_prevista, p.fecha_devolucion_real
@@ -126,6 +144,7 @@ class PrestamosController {
 
                 while (rs.next()) {
                     val real = rs.getString("fecha_devolucion_real")
+                    // calculo el estado segun si tiene fecha real o no
                     val estado = if (real != null && real.isNotEmpty()) "DEVUELTO" else "ACTIVO"
 
                     lista.add(Prestamo(
@@ -146,6 +165,7 @@ class PrestamosController {
         return lista
     }
 
+    // logica principal de la devolucion y calculo de multas
     private fun confirmarDevolucion(prestamo: Prestamo) {
         val alerta = Alert(Alert.AlertType.CONFIRMATION)
         alerta.headerText = "Confirmar Devolución"
@@ -160,11 +180,11 @@ class PrestamosController {
                     val fechaHoy = LocalDate.now()
                     val fechaPrevista = LocalDate.parse(prestamo.fechaDevolucionPrevista)
 
-                    // VERIFICAR SI HAY RETRASO
+                    // compruebo si hay retraso
                     if (fechaHoy.isAfter(fechaPrevista)) {
                         val diasRetraso = ChronoUnit.DAYS.between(fechaPrevista, fechaHoy)
 
-                        // Obtener usuario_id y tipo de publicación
+                        // necesito saber quien es el usuario y que tipo de libro es
                         val sqlInfo = """
                         SELECT p.usuario_id, u.tipo as tipo_usuario, l.tipo_publicacion
                         FROM prestamos p
@@ -182,20 +202,20 @@ class PrestamosController {
                             val tipoUsuario = rsInfo.getString("tipo_usuario")
                             val tipoPublicacion = rsInfo.getString("tipo_publicacion")
 
-                            // SOLO SANCIONAR A ESTUDIANTES (según PDF página 2)
+                            // sancion estudiantes
                             if (tipoUsuario == "ESTUDIANTE") {
-                                // CALCULAR DÍAS DE SANCIÓN SEGÚN TIPO
+                                // calculo la sancion segun el tipo de publicacion
                                 val diasSancion = if (tipoPublicacion == "REVISTA") {
-                                    // REVISTAS: 10 días FIJOS (PDF página 3)
+                                    // revistas siempre 10 dias
                                     10L
                                 } else {
-                                    // LIBROS: 2 × n días (PDF página 3)
+                                    // libros es el doble de los dias de retraso
                                     diasRetraso * 2
                                 }
 
                                 val fechaFinSancion = fechaHoy.plusDays(diasSancion)
 
-                                // Insertar Sanción
+                                // inserto la multa en la base de datos
                                 val sqlSancion = """
                                 INSERT INTO sanciones (usuario_id, motivo, fecha_inicio, fecha_fin, dias_sancion, estado)
                                 VALUES (?, ?, ?, ?, ?, 'ACTIVA')
@@ -215,7 +235,7 @@ class PrestamosController {
                                 psSancion.setLong(5, diasSancion)
                                 psSancion.executeUpdate()
 
-                                // Avisar con mensaje diferente según tipo
+                                // aviso de que se ha aplicado una multa automatica
                                 val aviso = Alert(Alert.AlertType.WARNING)
                                 aviso.headerText = "¡Sanción Aplicada!"
 
@@ -223,7 +243,7 @@ class PrestamosController {
                                     aviso.contentText = """
                                     REVISTA no devuelta a tiempo.
                                     
-                                    Según el reglamento (PDF pág. 3):
+                                    Según el reglamento:
                                     "En el caso de no devolver una revista en el día, 
                                     la sanción automática será de diez días."
                                     
@@ -242,7 +262,7 @@ class PrestamosController {
 
                                 aviso.showAndWait()
                             } else {
-                                // NO es estudiante, no se sanciona pero informamos del retraso
+                                // si no es estudiante solo informo
                                 val info = Alert(Alert.AlertType.INFORMATION)
                                 info.headerText = "Devolución con retraso"
                                 info.contentText = """
@@ -256,14 +276,14 @@ class PrestamosController {
                         }
                     }
 
-                    // Registrar devolución
+                    // actualizo la fecha real de devolucion en el prestamo
                     val sqlUpdate = "UPDATE prestamos SET fecha_devolucion_real = ? WHERE id = ?"
                     val ps = conn.prepareStatement(sqlUpdate)
                     ps.setString(1, fechaHoy.toString())
                     ps.setInt(2, prestamo.id)
                     ps.executeUpdate()
 
-                    // Liberar ejemplar
+                    // libero el ejemplar para que otro lo pueda pedir
                     val sqlLiberar = "UPDATE ejemplares SET estado = 'DISPONIBLE' WHERE id = (SELECT ejemplar_id FROM prestamos WHERE id = ?)"
                     val ps2 = conn.prepareStatement(sqlLiberar)
                     ps2.setInt(1, prestamo.id)
@@ -279,6 +299,7 @@ class PrestamosController {
         }
     }
 
+    // funcion para cambiar de pantalla
     private fun navegarA(fxml: String, titulo: String) {
         val stage = btnVolver.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource(fxml))

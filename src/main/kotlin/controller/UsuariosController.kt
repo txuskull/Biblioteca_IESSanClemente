@@ -20,23 +20,32 @@ class UsuariosController {
     @FXML private lateinit var btnEditar: Button
     @FXML private lateinit var btnBorrar: Button
 
+    // uso dos listas, una con todos los datos y otra filtrada para buscar
     private val listaUsuarios = FXCollections.observableArrayList<Usuario>()
     private lateinit var listaFiltrada: FilteredList<Usuario>
 
     @FXML
     fun initialize() {
+        // preparo la tabla
         configurarColumnas()
 
+        // cargo los usuarios de la base de datos
         listaUsuarios.setAll(cargarUsuarios())
+
+        // al principio la lista filtrada muestra todo (true)
         listaFiltrada = FilteredList(listaUsuarios) { true }
         tabla.items = listaFiltrada
 
-        // BÚSQUEDA EN TIEMPO REAL
+        // logica del buscador: se ejecuta cada vez que escribo una letra
         txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
             listaFiltrada.setPredicate { usuario ->
+                // si borro el texto, muestro a todos
                 if (nuevoTexto.isNullOrEmpty()) true
                 else {
+                    // paso a minusculas para comparar sin problemas
                     val lower = nuevoTexto.lowercase()
+
+                    // busco por nombre, dni o email
                     usuario.nombre.lowercase().contains(lower) ||
                             usuario.dni.lowercase().contains(lower) ||
                             usuario.email.lowercase().contains(lower)
@@ -45,6 +54,7 @@ class UsuariosController {
         }
     }
 
+    // aqui digo que propiedad del objeto usuario va en cada columna
     private fun configurarColumnas() {
         val colDni = tabla.columns[0] as TableColumn<Usuario, String>
         val colNombre = tabla.columns[1] as TableColumn<Usuario, String>
@@ -59,16 +69,19 @@ class UsuariosController {
         colSancion.cellValueFactory = PropertyValueFactory("sancionadoHasta")
     }
 
+    // volver al menu principal
     @FXML
     fun handleVolver() {
         navegarA("/fxml/dashboard.fxml", "Panel de Gestión")
     }
 
+    // ir al formulario vacio para crear usuario
     @FXML
     fun handleNuevo() {
         navegarA("/fxml/usuario_form.fxml", "Nuevo Usuario")
     }
 
+    // ir al formulario con los datos cargados para modificar
     @FXML
     fun handleEditar() {
         val usuarioSeleccionado = tabla.selectionModel.selectedItem
@@ -76,6 +89,8 @@ class UsuariosController {
         if (usuarioSeleccionado != null) {
             val loader = FXMLLoader(javaClass.getResource("/fxml/usuario_form.fxml"))
             val root = loader.load<Any>()
+
+            // recupero el controlador del formulario para pasarle el usuario
             val controller = loader.getController<UsuarioFormController>()
             controller.cargarUsuarioParaEditar(usuarioSeleccionado)
 
@@ -84,15 +99,18 @@ class UsuariosController {
             stage.isMaximized = true
             stage.title = "Editar Usuario"
         } else {
+            // si no selecciono nada, aviso
             mostrarAlerta("Atencion", "Por favor, selecciona un usuario.", Alert.AlertType.WARNING)
         }
     }
 
+    // borrar usuario de la base de datos
     @FXML
     fun handleBorrar() {
         val usuarioSeleccionado = tabla.selectionModel.selectedItem
 
         if (usuarioSeleccionado != null) {
+            // pido confirmacion antes de borrar
             val alerta = Alert(Alert.AlertType.CONFIRMATION)
             alerta.title = "Confirmar borrado"
             alerta.headerText = null
@@ -101,6 +119,7 @@ class UsuariosController {
             val respuesta = alerta.showAndWait()
             if (respuesta.isPresent && respuesta.get() == ButtonType.OK) {
                 borrarUsuario(usuarioSeleccionado.id)
+                // recargo la lista para ver los cambios
                 listaUsuarios.setAll(cargarUsuarios())
             }
         } else {
@@ -108,6 +127,7 @@ class UsuariosController {
         }
     }
 
+    // conectar a la base de datos y traer la lista de usuarios
     private fun cargarUsuarios(): List<Usuario> {
         val lista = mutableListOf<Usuario>()
         val gestor = GestorBaseDatos()
@@ -116,6 +136,7 @@ class UsuariosController {
             try {
                 val rs = conn.createStatement().executeQuery("SELECT * FROM usuarios")
                 while (rs.next()) {
+                    // convierto el string de la base de datos a mi enum de kotlin
                     val tipoTexto = rs.getString("tipo")
                     val tipoEnum = try {
                         model.TipoUsuario.valueOf(tipoTexto)
@@ -140,6 +161,7 @@ class UsuariosController {
         return lista
     }
 
+    // ejecutar el delete en sql
     private fun borrarUsuario(id: Int) {
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
@@ -155,6 +177,7 @@ class UsuariosController {
         }
     }
 
+    // funcion para cambiar de ventana
     private fun navegarA(fxml: String, titulo: String) {
         val stage = btnVolver.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource(fxml))

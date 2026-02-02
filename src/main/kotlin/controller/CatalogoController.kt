@@ -13,6 +13,7 @@ import model.Libro
 
 class CatalogoController {
 
+    // enlazo con los elementos de la vista
     @FXML private lateinit var btnVolver: Button
     @FXML private lateinit var txtBuscar: TextField
     @FXML private lateinit var tabla: TableView<Libro>
@@ -20,23 +21,34 @@ class CatalogoController {
     @FXML private lateinit var btnEditar: Button
     @FXML private lateinit var btnBorrar: Button
 
+    // uso una lista observable para que la tabla se actualice sola si cambio algo
     private val listaLibros = FXCollections.observableArrayList<Libro>()
+    // esta lista filtrada es un "envoltorio" para poder buscar sin perder los datos originales
     private lateinit var listaFiltrada: FilteredList<Libro>
 
     @FXML
     fun initialize() {
-        // IMPORTANTE: Configurar las columnas de la tabla
+        // preparo las columnas para saber que dato va en cada sitio
         configurarColumnas()
 
+        // cargo los libros de la base de datos
         listaLibros.setAll(cargarLibros())
+
+        // al principio muestro todo (predicado true)
         listaFiltrada = FilteredList(listaLibros) { true }
         tabla.items = listaFiltrada
 
+        // aqui configuro el buscador en tiempo real
+        // cada vez que escribo una letra, se ejecuta este codigo
         txtBuscar.textProperty().addListener { _, _, nuevoTexto ->
             listaFiltrada.setPredicate { libro ->
+                // si borro el texto, muestro todos
                 if (nuevoTexto.isNullOrEmpty()) true
                 else {
+                    // paso todo a minusculas para no distinguir entre mayusculas y minusculas
                     val lower = nuevoTexto.lowercase()
+
+                    // busco por titulo, autor, isbn o editorial
                     libro.titulo.lowercase().contains(lower) ||
                             (libro.autor?.lowercase()?.contains(lower) ?: false) ||
                             libro.isbn.lowercase().contains(lower) ||
@@ -47,6 +59,7 @@ class CatalogoController {
     }
 
     private fun configurarColumnas() {
+        // recojo las columnas del fxml por orden (0, 1, 2...)
         val colId = tabla.columns[0] as TableColumn<Libro, Int>
         val colIsbn = tabla.columns[1] as TableColumn<Libro, String>
         val colTitulo = tabla.columns[2] as TableColumn<Libro, String>
@@ -55,14 +68,16 @@ class CatalogoController {
         val colAutor = tabla.columns[5] as TableColumn<Libro, String>
         val colEditorial = tabla.columns[6] as TableColumn<Libro, String>
 
+        // le digo a cada columna que propiedad del objeto Libro tiene que pintar
         colId.cellValueFactory = PropertyValueFactory("id")
         colIsbn.cellValueFactory = PropertyValueFactory("isbn")
         colTitulo.cellValueFactory = PropertyValueFactory("titulo")
 
-        // Configuramos la columna STOCK
+        // columna especial STOCK
         colStock.cellValueFactory = PropertyValueFactory("stock")
 
-        // Renderizar en ROJO si no hay stock (0 disponibles)
+        // si el stock empieza por "0/", significa que no quedan libros
+        // asi que pinto la celda de rojo suave para avisar al conserje
         colStock.setCellFactory {
             object : TableCell<Libro, String>() {
                 override fun updateItem(item: String?, empty: Boolean) {
@@ -72,8 +87,8 @@ class CatalogoController {
                         style = ""
                     } else {
                         text = item
-                        // Si empieza por "0/", poner en rojo claro y negrita
                         if (item.startsWith("0/")) {
+                            // rojo claro de fondo y letra en negrita
                             style = "-fx-background-color: #ffcccc; -fx-font-weight: bold; -fx-alignment: CENTER;"
                         } else {
                             style = "-fx-alignment: CENTER;"
@@ -83,6 +98,7 @@ class CatalogoController {
             }
         }
 
+        // esta columna es un enum, asi que saco el nombre en string
         colTipo.setCellValueFactory { libro ->
             javafx.beans.property.SimpleStringProperty(libro.value.tipoPublicacion.name)
         }
@@ -90,16 +106,19 @@ class CatalogoController {
         colEditorial.cellValueFactory = PropertyValueFactory("editorial")
     }
 
+    // volver al menu principal
     @FXML
     fun handleVolver() {
         navegarA("/fxml/dashboard.fxml", "Panel de Gestión")
     }
 
+    // ir al formulario vacio para crear
     @FXML
     fun handleNuevo() {
         navegarA("/fxml/libro_form.fxml", "Nuevo Libro")
     }
 
+    // ir al formulario relleno para editar
     @FXML
     fun handleEditar() {
         val libroSeleccionado = tabla.selectionModel.selectedItem
@@ -107,6 +126,8 @@ class CatalogoController {
         if (libroSeleccionado != null) {
             val loader = FXMLLoader(javaClass.getResource("/fxml/libro_form.fxml"))
             val root = loader.load<Any>()
+
+            // aqui recupero el controlador del formulario para pasarle el libro
             val controller = loader.getController<LibroFormController>()
             controller.cargarLibroParaEditar(libroSeleccionado)
 
@@ -115,15 +136,18 @@ class CatalogoController {
             stage.isMaximized = true
             stage.title = "Editar Libro"
         } else {
+            // si no selecciono nada, aviso
             mostrarAlerta("Aviso", "Selecciona un libro para editarlo.", Alert.AlertType.WARNING)
         }
     }
 
+    // borrar el libro de la base de datos
     @FXML
     fun handleBorrar() {
         val libroSeleccionado = tabla.selectionModel.selectedItem
 
         if (libroSeleccionado != null) {
+            // pregunto antes de borrar para evitar accidentes
             val alerta = Alert(Alert.AlertType.CONFIRMATION)
             alerta.title = "Confirmar borrado"
             alerta.headerText = null
@@ -132,6 +156,7 @@ class CatalogoController {
             val respuesta = alerta.showAndWait()
             if (respuesta.isPresent && respuesta.get() == ButtonType.OK) {
                 borrarLibroDeBD(libroSeleccionado.id)
+                // recargo la lista para que desaparezca de la tabla
                 listaLibros.setAll(cargarLibros())
             }
         } else {
@@ -139,6 +164,7 @@ class CatalogoController {
         }
     }
 
+    // funcion para traer los datos de SQLite
     private fun cargarLibros(): List<Libro> {
         val lista = mutableListOf<Libro>()
         val gestor = GestorBaseDatos()
@@ -146,7 +172,9 @@ class CatalogoController {
 
         if (conn != null) {
             try {
-                // SQL MEJORADO: Cuenta ejemplares y disponibles al vuelo
+                // esta consulta es un poco mas compleja
+                // hago dos subconsultas para contar cuantas copias hay en total y cuantas estan disponibles
+                // asi puedo mostrar "2/3" en la columna de stock
                 val sql = """
                     SELECT l.*, 
                            (SELECT COUNT(*) FROM ejemplares e WHERE e.libro_id = l.id) as total_copias,
@@ -162,7 +190,7 @@ class CatalogoController {
                         model.TipoPublicacion.valueOf(tipoTexto)
                     } catch (e: Exception) { model.TipoPublicacion.LIBRO }
 
-                    // Calculamos el string de stock: "2/3"
+                    // monto el string de stock
                     val total = rs.getInt("total_copias")
                     val disp = rs.getInt("disponibles")
                     val stockStr = "$disp/$total"
@@ -173,8 +201,7 @@ class CatalogoController {
                         titulo = rs.getString("titulo"),
                         tipoPublicacion = tipoEnum,
 
-                        // Pasamos el stock calculado
-                        stock = stockStr,
+                        stock = stockStr, // aqui va el string calculado
 
                         temas = rs.getString("temas") ?: "Sin temas",
                         editorial = rs.getString("editorial") ?: "Sin editorial",
@@ -217,6 +244,7 @@ class CatalogoController {
         }
     }
 
+    // funcion estandar de navegacion
     private fun navegarA(fxml: String, titulo: String) {
         val stage = btnVolver.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource(fxml))

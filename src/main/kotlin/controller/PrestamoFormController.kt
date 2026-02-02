@@ -19,6 +19,7 @@ class PrestamoFormController {
     @FXML private lateinit var btnCancelar: Button
     @FXML private lateinit var btnGuardar: Button
 
+    // clases internas pequeñitas para mostrar bien los nombres en los desplegables
     class ComboUsuario(val id: Int, val nombre: String, val tipo: String) {
         override fun toString(): String = nombre
     }
@@ -29,17 +30,20 @@ class PrestamoFormController {
 
     @FXML
     fun initialize() {
+        // pongo la fecha de hoy por defecto
         datePicker.value = LocalDate.now()
 
+        // cargo las listas desplegables
         cargarUsuarios(cmbUsuarios, "")
         cargarLibros(cmbLibros)
 
+        // buscador de usuarios en tiempo real
         txtBuscarUsuario.textProperty().addListener { _, _, nuevoTexto ->
             cargarUsuarios(cmbUsuarios, nuevoTexto)
-            cmbUsuarios.show()
+            cmbUsuarios.show() // despliego la lista para que vea las opciones
         }
 
-        // Listener para calcular fecha de devolución automáticamente
+        // cuando elijo libro o usuario, calculo la fecha de devolucion sola
         cmbLibros.selectionModel.selectedItemProperty().addListener { _, _, libroSeleccionado ->
             if (libroSeleccionado != null) {
                 calcularFechaDevolucion()
@@ -51,6 +55,7 @@ class PrestamoFormController {
         }
     }
 
+    // aqui aplico las REGLAS DEL NEGOCIO que se piden
     private fun calcularFechaDevolucion() {
         val libro = cmbLibros.value
         val usuario = cmbUsuarios.value
@@ -58,14 +63,15 @@ class PrestamoFormController {
         if (libro != null && usuario != null) {
             val fechaPrestamo = datePicker.value
 
-            // Determinar días según tipo de publicación y tipo de usuario
+            // Determinar dias segun tipo de publicación y tipo de usuario
             val dias = when {
-                libro.tipoPublicacion == "LIBRO" -> 7 // Libros siempre 7 días
-                libro.tipoPublicacion == "REVISTA" && usuario.tipo == "PROFESOR" -> 7 // Profesores: 7 días con revistas
-                libro.tipoPublicacion == "REVISTA" -> 1 // Estudiantes/Personal: 1 día con revistas
+                libro.tipoPublicacion == "LIBRO" -> 7 // Libros siempre 7 días para todos
+                libro.tipoPublicacion == "REVISTA" && usuario.tipo == "PROFESOR" -> 7 // Profesores tienen "privilegios" con revistas
+                libro.tipoPublicacion == "REVISTA" -> 1 // Estudiantes/Personal solo 1 día para revistas
                 else -> 7
             }
 
+            // sumo los dias a la fecha de hoy y lo pongo en el calendario de devolucion
             dateDevolucion.value = fechaPrestamo.plusDays(dias.toLong())
         }
     }
@@ -82,19 +88,22 @@ class PrestamoFormController {
         val fechaP = datePicker.value
         val fechaD = dateDevolucion.value
 
+        // validacion basica de campos vacios
         if (usuario == null || libro == null || fechaP == null || fechaD == null) {
             mostrarAlerta("Faltan datos", "Debes seleccionar usuario, libro y fechas.", Alert.AlertType.WARNING)
             return
         }
 
-        // VALIDACIÓN 1: Usuario sancionado
+        // VALIDACIÓN 1: Usuario castigado no puede llevarse nada
         if (usuarioTieneSancionActiva(usuario.id)) {
             mostrarAlerta("USUARIO SANCIONADO", "No se puede realizar el préstamo. El usuario tiene una sanción activa.", Alert.AlertType.ERROR)
             return
         }
 
-        // VALIDACIÓN 2: Solo 1 revista simultánea para estudiantes/personal
+        // VALIDACIÓN 2: Regla especial de revistas
+        // si es una revista y NO es profesor...
         if (libro.tipoPublicacion == "REVISTA" && usuario.tipo != "PROFESOR") {
+            // ...compruebo si ya tiene otra revista en casa
             if (usuarioTieneRevistaPrestada(usuario.id)) {
                 mostrarAlerta("LÍMITE DE REVISTAS",
                     "Los estudiantes y personal solo pueden tener 1 revista prestada a la vez.\n" +
@@ -104,7 +113,7 @@ class PrestamoFormController {
             }
         }
 
-        // Fechas incorretas
+        // validacion logica de fechas
         if (fechaD.isBefore(fechaP)) {
             mostrarAlerta("Fecha incorrecta",
                 "La fecha de devolución no puede ser anterior a la fecha de préstamo.",
@@ -112,10 +121,11 @@ class PrestamoFormController {
             return
         }
 
-        // Intentar guardar préstamo
+        // si pasa todo, guardo el prestamo
         guardarPrestamo(usuario.id, libro.id, fechaP, fechaD)
     }
 
+    // consulto a la base de datos si el usuario esta sancionado
     private fun usuarioTieneSancionActiva(idUsuario: Int): Boolean {
         var sancionado = false
         val gestor = GestorBaseDatos()
@@ -137,12 +147,14 @@ class PrestamoFormController {
         return sancionado
     }
 
+    // compruebo si ya tiene revistas sin devolver
     private fun usuarioTieneRevistaPrestada(idUsuario: Int): Boolean {
         var tieneRevista = false
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
+                // busco prestamos de este usuario, que sean revistas y que NO tengan fecha de devolucion real (aun no devueltos)
                 val sql = """
                     SELECT COUNT(*) as total
                     FROM prestamos p
@@ -166,6 +178,7 @@ class PrestamoFormController {
         return tieneRevista
     }
 
+    // cargo el combo de usuarios con filtro por nombre
     private fun cargarUsuarios(cmb: ComboBox<ComboUsuario>, filtro: String) {
         val gestor = GestorBaseDatos()
         val conn = gestor.getConexion()
@@ -175,7 +188,6 @@ class PrestamoFormController {
 
         if (conn != null) {
             try {
-                // Cargar TODOS los usuarios (estudiantes, profesores, conserjes...)
                 val sql = "SELECT id, nombre, tipo FROM usuarios WHERE nombre LIKE ?"
                 val ps = conn.prepareStatement(sql)
                 ps.setString(1, "%$filtro%")
@@ -190,6 +202,7 @@ class PrestamoFormController {
                 }
                 conn.close()
 
+                // intento mantener la seleccion si no he borrado al usuario elegido
                 if (filtro.isEmpty() && seleccionPrevia != null) {
                     cmb.value = seleccionPrevia
                 } else if (cmb.items.isNotEmpty()) {
@@ -227,7 +240,7 @@ class PrestamoFormController {
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
-                // Buscar ejemplar disponible
+                // PASO 1: Buscar si queda algun ejemplar fisico DISPONIBLE de ese libro
                 val sqlBuscar = "SELECT id FROM ejemplares WHERE libro_id = ? AND estado = 'DISPONIBLE' LIMIT 1"
                 val psBuscar = conn.prepareStatement(sqlBuscar)
                 psBuscar.setInt(1, idLibro)
@@ -236,7 +249,7 @@ class PrestamoFormController {
                 if (rs.next()) {
                     val idEjemplar = rs.getInt("id")
 
-                    // Registrar préstamo
+                    // PASO 2: Registrar el prestamo en el historial
                     val sqlInsert = """
                         INSERT INTO prestamos (usuario_id, ejemplar_id, fecha_prestamo, fecha_devolucion_prevista)
                         VALUES (?, ?, ?, ?)
@@ -248,7 +261,7 @@ class PrestamoFormController {
                     psInsert.setString(4, fDev.toString())
                     psInsert.executeUpdate()
 
-                    // Marcar ejemplar como prestado
+                    // PASO 3: Marcar ese ejemplar como PRESTADO para que nadie mas lo coja
                     val sqlUpdate = "UPDATE ejemplares SET estado = 'PRESTADO' WHERE id = ?"
                     val psUpdate = conn.prepareStatement(sqlUpdate)
                     psUpdate.setInt(1, idEjemplar)
@@ -265,6 +278,7 @@ class PrestamoFormController {
                     navegarAPrestamos()
 
                 } else {
+                    // si no hay stock, aviso
                     mostrarAlerta("Sin stock", "No hay ejemplares disponibles de esta publicación.", Alert.AlertType.ERROR)
                 }
             } catch (e: Exception) {
