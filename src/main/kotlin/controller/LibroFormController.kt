@@ -359,10 +359,11 @@ class LibroFormController {
     private fun navegarACatalogo() {
         val stage = btnCancelar.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource("/fxml/catalogo.fxml"))
-        val root = loader.load<Any>()
+        // Cargo el root como Parent (importante para el cambio de contenido)
+        val root = loader.load<javafx.scene.Parent>()
 
-        stage.scene = Scene(root as javafx.scene.Parent, 1150.0, 750.0)
-        stage.isMaximized = true
+        // Reemplazo el contenido de la escena, no la escena entera
+        stage.scene.root = root
         stage.title = "Catálogo de Libros"
     }
 }

@@ -45,10 +45,17 @@ class DashboardController {
     fun handleCerrarSesion() {
         val stage = btnCerrarSesion.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource("/fxml/login.fxml"))
-        val root = loader.load<Any>()
+        val root = loader.load<javafx.scene.Parent>()
 
-        // vuelvo a poner la ventana en tamaño pequeño para el login
-        stage.scene = Scene(root as javafx.scene.Parent, 900.0, 600.0)
+        // Reemplazamos el contenido, no la escena
+        stage.scene.root = root
+
+        // Ajustamos la ventana para el Login
+        stage.isMaximized = false
+        stage.width = 900.0
+        stage.height = 600.0
+        stage.centerOnScreen()
+
         stage.title = "Biblioteca IES San Clemente - Acceso Seguro"
     }
 
@@ -77,11 +84,10 @@ class DashboardController {
     private fun navegarA(fxml: String, titulo: String) {
         val stage = btnCatalogo.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource(fxml))
-        val root = loader.load<Any>()
+        val root = loader.load<javafx.scene.Parent>()
 
-        // maximizo la ventana para aprovechar la pantalla completa
-        stage.scene = Scene(root as javafx.scene.Parent, 1150.0, 750.0)
-        stage.isMaximized = true
+        // Al no crear una 'new Scene', la ventana mantiene su tamaño y maximizado perfectos.
+        stage.scene.root = root
         stage.title = titulo
     }
 

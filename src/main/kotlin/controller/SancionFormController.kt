@@ -126,14 +126,14 @@ class SancionFormController {
         }
     }
 
-    // funcion para cambiar de pantalla
     private fun navegarASanciones() {
         val stage = btnCancelar.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource("/fxml/sanciones.fxml"))
-        val root = loader.load<Any>()
+        // Cargar como Parent
+        val root = loader.load<javafx.scene.Parent>()
 
-        stage.scene = Scene(root as javafx.scene.Parent, 1150.0, 750.0)
-        stage.isMaximized = true
+        // Cambiar contenido
+        stage.scene.root = root
         stage.title = "Registro de Sanciones"
     }
 }

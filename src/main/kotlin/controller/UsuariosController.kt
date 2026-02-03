@@ -179,12 +179,17 @@ class UsuariosController {
 
     // funcion para cambiar de ventana
     private fun navegarA(fxml: String, titulo: String) {
+        // cojo la ventana actual
         val stage = btnVolver.scene.window as Stage
-        val loader = FXMLLoader(javaClass.getResource(fxml))
-        val root = loader.load<Any>()
 
-        stage.scene = Scene(root as javafx.scene.Parent, 1150.0, 750.0)
-        stage.isMaximized = true
+        val loader = FXMLLoader(javaClass.getResource(fxml))
+        val root = loader.load<javafx.scene.Parent>()
+
+        // en vez de crear una 'new Scene', le digo a la escena actual
+        // que cambie su contenido (root) por el nuevo
+        stage.scene.root = root
+
+        // esto mantiene el tamaño y el maximizado que ya tenias
         stage.title = titulo
     }
 

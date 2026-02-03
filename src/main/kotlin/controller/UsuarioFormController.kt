@@ -121,10 +121,11 @@ class UsuarioFormController {
         try {
             val stage = btnCancelar.scene.window as Stage
             val loader = FXMLLoader(javaClass.getResource("/fxml/usuarios.fxml"))
-            val root = loader.load<Any>()
+            // Cargar como Parent
+            val root = loader.load<javafx.scene.Parent>()
 
-            stage.scene = Scene(root as javafx.scene.Parent, 1150.0, 750.0)
-            stage.isMaximized = true
+            // Cambiar contenido, no ventana
+            stage.scene.root = root
             stage.title = "Directorio de Usuarios"
         } catch (e: Exception) {
             println("Error navegando: ${e.message}")

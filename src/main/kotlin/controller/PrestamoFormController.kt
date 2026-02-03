@@ -291,11 +291,10 @@ class PrestamoFormController {
     private fun navegarAPrestamos() {
         val stage = btnCancelar.scene.window as Stage
         val loader = FXMLLoader(javaClass.getResource("/fxml/prestamos.fxml"))
-        val root = loader.load<Any>()
+        val root = loader.load<javafx.scene.Parent>()
 
-        stage.scene = Scene(root as javafx.scene.Parent, 1150.0, 750.0)
-        stage.isMaximized = true
-        stage.title = "Gestión de Préstamos"
+        stage.scene.root = root
+        stage.title = "Control de Préstamos"
     }
 
     private fun mostrarAlerta(titulo: String, mensaje: String, tipo: Alert.AlertType = Alert.AlertType.WARNING) {
