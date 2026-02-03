@@ -57,25 +57,30 @@
     -fx-text-fill: white;
 }
 
-/* BOTÓN ACCIÓN PRINCIPAL (Nuevo, Crear) - Azul acero claro */
+/* 1. BOTÓN ACCIÓN PRINCIPAL (Nuevo, Crear)
+   Le damos el azul más oscuro y fuerte (#26547C) para que destaque más.
+*/
 .boton-nuevo {
-    -fx-background-color: rgba(52, 120, 160, 1);
+    -fx-background-color: rgba(38, 84, 124, 1); /* Azul Oscuro (El de los botones fuertes) */
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 5;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
 }
 
 .boton-nuevo:hover {
-    -fx-background-color: rgba(70, 141, 174, 1);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
+    -fx-background-color: rgba(25, 55, 82, 1); /* Aún más oscuro al pasar el ratón */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 1);
 }
 
-/* BOTÓN SECUNDARIO (Editar) - Azul oscuro */
+/* 2. BOTÓN SECUNDARIO (Editar)
+   Aquí usamos tu AZUL TARJETA (#87A6CE).
+*/
 .boton-secundario {
-    -fx-background-color: rgba(38, 84, 124, 1);
-    -fx-text-fill: white;
+    -fx-background-color: rgba(135, 166, 206, 1); /* Tu Azul Tarjeta */
+    -fx-text-fill: rgba(25, 55, 82, 1); /* Texto oscuro para contraste */
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 5;
@@ -83,10 +88,9 @@
 }
 
 .boton-secundario:hover {
-    -fx-background-color: rgba(70, 141, 174, 1);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 1);
+    -fx-background-color: rgba(115, 146, 186, 1); /* Un pelín más oscuro */
+    -fx-text-fill: white; /* Al pasar el ratón, texto blanco para efecto visual */
 }
-
 /* BOTÓN CERRAR SESIÓN (mantener aparte para el dashboard) */
 .boton-cerrar {
     -fx-background-color: rgba(38, 84, 124, 1);
