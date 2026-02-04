@@ -4,7 +4,7 @@ import java.sql.DriverManager
 
 class GestorBaseDatos {
 
-    // la ruta donde se guarda mi base de datos, es un archivo local
+    // la ruta donde se guarda mi base de datos es un archivo local
     private val url = "jdbc:sqlite:biblioteca.db"
 
     // funcion basica para conectar, la uso en todas las consultas

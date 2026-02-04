@@ -1,0 +1,46 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\txusk\Desktop\Biblioteca_IESSanClemente\Biblioteca.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\txusk\Desktop\Biblioteca_IESSanClemente\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.017.000
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\app\txusk\product\21c\dbhomeXE\bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Program Files\HP\OMEN-Broadcast\Common;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Go\bin;C:\Users\txusk\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\txusk\AppData\Local\Programs\Python\Python311\;C:\Users\txusk\AppData\Local\Microsoft\WindowsApps;C:\Users\txusk\Documents\Microsoft VS Code\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.3\bin;C:\Users\txusk\go\bin;C:\Users\txusk\AppData\Local\Programs\Python\Python312;C:\Users\txusk\AppData\Local\Programs\Python\Python312\Scripts;C:\Program Files\Java\jdk-23\bin
+JRE paths:	;C:\Program Files\Common Files\Oracle\Java\javapath;C:\app\txusk\product\21c\dbhomeXE\bin;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps;C:\Program Files\HP\OMEN-Broadcast\Common;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Go\bin;C:\Users\txusk\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\txusk\AppData\Local\Programs\Python\Python311\;C:\Users\txusk\AppData\Local\Microsoft\WindowsApps;C:\Users\txusk\Documents\Microsoft VS Code\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.3\bin;C:\Users\txusk\go\bin;C:\Users\txusk\AppData\Local\Programs\Python\Python312;C:\Users\txusk\AppData\Local\Programs\Python\Python312\Scripts;C:\Program Files\Java\jdk-23\bin
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\app\txusk\product\21c\dbhomeXE\bin\javaw.exe (not found)
+Check launcher:	C:\windows\system32\bin\javaw.exe (not found)
+Check launcher:	C:\windows\bin\javaw.exe (not found)
+Check launcher:	C:\windows\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\windows\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\windows\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR\bin\javaw.exe (not found)
+Check launcher:	C:\Users\Administrator\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\HP\OMEN-Broadcast\Common\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\system32\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Go\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\AppData\Local\Programs\Python\Python311\Scripts\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\AppData\Local\Programs\Python\Python311\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\Documents\Microsoft VS Code\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.3\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\go\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\AppData\Local\Programs\Python\Python312\bin\javaw.exe (not found)
+Check launcher:	C:\Users\txusk\AppData\Local\Programs\Python\Python312\Scripts\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Java\jdk-23\bin\javaw.exe (OK)
+Version string: 1.023.000_001 / 64-Bit (OK)
+Launcher:	C:\Program Files\Java\jdk-23\bin\javaw.exe
+Launcher args:	-jar "C:\Users\txusk\Desktop\Biblioteca_IESSanClemente\Biblioteca.exe"
+Args length:	70/32768 chars
+Exit code:	0
