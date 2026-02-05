@@ -87,14 +87,22 @@ class GestorBaseDatos {
     // crear todas las tablas la primera vez
     fun iniciarSistema() {
         // tabla de usuarios con un campo para diferenciar profe, alumno o conserje
-        val sqlUsers = """
+                val sqlUsers = """
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 dni TEXT UNIQUE,
                 nombre TEXT,
+                apellido TEXT DEFAULT '',
                 password TEXT,
                 tipo TEXT,
                 email TEXT,
+                fecha_nacimiento TEXT,
+                genero TEXT,
+                telefono TEXT,
+                direccion_calle TEXT,
+                direccion_ciudad TEXT,
+                direccion_cp TEXT,
+                direccion_provincia TEXT,
                 sancionado_hasta TEXT DEFAULT NULL
             );
         """
@@ -189,48 +197,48 @@ class GestorBaseDatos {
             // DATOS DE PRUEBA MASIVOS (USUARIOS) - Total: 20+
             // ==============================================================================
             stmt.execute("""
-                INSERT OR IGNORE INTO usuarios (dni, nombre, tipo, email) VALUES
-                -- Profesores del departamento de Informatica
-                ('11111111A', 'Ana Garcia Perez', 'PROFESOR', 'ana.garcia@sanclemente.net'),
-                ('22222222B', 'Carlos Rodriguez Lopez', 'PROFESOR', 'carlos.rodriguez@sanclemente.net'),
-                ('33333333C', 'Maria Martinez Ruiz', 'PROFESOR', 'maria.martinez@sanclemente.net'),
-                ('44444444D', 'David Fernandez Gomez', 'PROFESOR', 'david.fernandez@sanclemente.net'),
-                ('55555555E', 'Lucia Gonzalez Diaz', 'PROFESOR', 'lucia.gonzalez@sanclemente.net'),
+    INSERT OR IGNORE INTO usuarios (dni, nombre, apellido, tipo, email) VALUES
+    -- Profesores del departamento de Informatica
+    ('11111111A', 'Ana', 'Garcia Perez', 'PROFESOR', 'ana.garcia@sanclemente.net'),
+    ('22222222B', 'Carlos', 'Rodriguez Lopez', 'PROFESOR', 'carlos.rodriguez@sanclemente.net'),
+    ('33333333C', 'Maria', 'Martinez Ruiz', 'PROFESOR', 'maria.martinez@sanclemente.net'),
+    ('44444444D', 'David', 'Fernandez Gomez', 'PROFESOR', 'david.fernandez@sanclemente.net'),
+    ('55555555E', 'Lucia', 'Gonzalez Diaz', 'PROFESOR', 'lucia.gonzalez@sanclemente.net'),
 
-                -- Alumnos de DAM (Desarrollo de Aplicaciones Multiplataforma)
-                ('66666666F', 'Pablo Sanchez Martin', 'ESTUDIANTE', 'pablo.sanchez@sanclemente.net'),
-                ('77777777G', 'Laura Lopez Perez', 'ESTUDIANTE', 'laura.lopez@sanclemente.net'),
-                ('88888888H', 'Javier Martin Garcia', 'ESTUDIANTE', 'javier.martin@sanclemente.net'),
-                ('99999999I', 'Sara Gomez Rodriguez', 'ESTUDIANTE', 'sara.gomez@sanclemente.net'),
-                ('10101010J', 'Daniel Ruiz Fernandez', 'ESTUDIANTE', 'daniel.ruiz@sanclemente.net'),
-                ('12121212K', 'Marta Diaz Gonzalez', 'ESTUDIANTE', 'marta.diaz@sanclemente.net'),
-                ('13131313L', 'Alejandro Perez Sanchez', 'ESTUDIANTE', 'alejandro.perez@sanclemente.net'),
-                ('24242424W', 'Nerea Castro Varela', 'ESTUDIANTE', 'nerea.castro@sanclemente.net'),
-                ('25252525X', 'Hugo Dominguez Blanco', 'ESTUDIANTE', 'hugo.dominguez@sanclemente.net'),
-                ('26262626Y', 'Alba Pereira Sanchez', 'ESTUDIANTE', 'alba.pereira@sanclemente.net'),
-                ('27272727Z', 'Mario Alvarez Lago', 'ESTUDIANTE', 'mario.alvarez@sanclemente.net'),
-                ('28282828A', 'Noa Garcia Seara', 'ESTUDIANTE', 'noa.garcia@sanclemente.net'),
-                ('29292929B', 'Izan Romero Iglesias', 'ESTUDIANTE', 'izan.romero@sanclemente.net'),
-                ('30303030C', 'Carla Soto Martinez', 'ESTUDIANTE', 'carla.soto@sanclemente.net'),
-                ('31313131D', 'Enzo Vidal Pardo', 'ESTUDIANTE', 'enzo.vidal@sanclemente.net'),
-                ('32323232E', 'Vera Mendez Lopez', 'ESTUDIANTE', 'vera.mendez@sanclemente.net'),
-                ('34343434F', 'Gael Blanco Fernandez', 'ESTUDIANTE', 'gael.blanco@sanclemente.net'),
-                
-                -- Alumnos de DAW (Desarrollo de Aplicaciones Web)
-                ('14141414M', 'Sofia Rodriguez Martin', 'ESTUDIANTE', 'sofia.rodriguez@sanclemente.net'),
-                ('15151515N', 'Diego Garcia Lopez', 'ESTUDIANTE', 'diego.garcia@sanclemente.net'),
-                ('16161616O', 'Paula Martinez Gomez', 'ESTUDIANTE', 'paula.martinez@sanclemente.net'),
-                ('17171717P', 'Adrian Fernandez Ruiz', 'ESTUDIANTE', 'adrian.fernandez@sanclemente.net'),
-                
-                -- Alumnos de ASIR (Administracion de Sistemas)
-                ('18181818Q', 'Claudia Gonzalez Diaz', 'ESTUDIANTE', 'claudia.gonzalez@sanclemente.net'),
-                ('19191919R', 'Manuel Sanchez Perez', 'ESTUDIANTE', 'manuel.sanchez@sanclemente.net'),
-                ('20202020S', 'Irene Lopez Martin', 'ESTUDIANTE', 'irene.lopez@sanclemente.net'),
-                ('21212121T', 'Ruben Martin Garcia', 'ESTUDIANTE', 'ruben.martin@sanclemente.net'),
-                
-                -- Conserjes adicionales
-                ('23232323V', 'Antonio Conserje Tarde', 'CONSERJE', 'antonio.conserje@sanclemente.net');
-            """)
+    -- Alumnos de DAM
+    ('66666666F', 'Pablo', 'Sanchez Martin', 'ESTUDIANTE', 'pablo.sanchez@sanclemente.net'),
+    ('77777777G', 'Laura', 'Lopez Perez', 'ESTUDIANTE', 'laura.lopez@sanclemente.net'),
+    ('88888888H', 'Javier', 'Martin Garcia', 'ESTUDIANTE', 'javier.martin@sanclemente.net'),
+    ('99999999I', 'Sara', 'Gomez Rodriguez', 'ESTUDIANTE', 'sara.gomez@sanclemente.net'),
+    ('10101010J', 'Daniel', 'Ruiz Fernandez', 'ESTUDIANTE', 'daniel.ruiz@sanclemente.net'),
+    ('12121212K', 'Marta', 'Diaz Gonzalez', 'ESTUDIANTE', 'marta.diaz@sanclemente.net'),
+    ('13131313L', 'Alejandro', 'Perez Sanchez', 'ESTUDIANTE', 'alejandro.perez@sanclemente.net'),
+    ('24242424W', 'Nerea', 'Castro Varela', 'ESTUDIANTE', 'nerea.castro@sanclemente.net'),
+    ('25252525X', 'Hugo', 'Dominguez Blanco', 'ESTUDIANTE', 'hugo.dominguez@sanclemente.net'),
+    ('26262626Y', 'Alba', 'Pereira Sanchez', 'ESTUDIANTE', 'alba.pereira@sanclemente.net'),
+    ('27272727Z', 'Mario', 'Alvarez Lago', 'ESTUDIANTE', 'mario.alvarez@sanclemente.net'),
+    ('28282828A', 'Noa', 'Garcia Seara', 'ESTUDIANTE', 'noa.garcia@sanclemente.net'),
+    ('29292929B', 'Izan', 'Romero Iglesias', 'ESTUDIANTE', 'izan.romero@sanclemente.net'),
+    ('30303030C', 'Carla', 'Soto Martinez', 'ESTUDIANTE', 'carla.soto@sanclemente.net'),
+    ('31313131D', 'Enzo', 'Vidal Pardo', 'ESTUDIANTE', 'enzo.vidal@sanclemente.net'),
+    ('32323232E', 'Vera', 'Mendez Lopez', 'ESTUDIANTE', 'vera.mendez@sanclemente.net'),
+    ('34343434F', 'Gael', 'Blanco Fernandez', 'ESTUDIANTE', 'gael.blanco@sanclemente.net'),
+    
+    -- Alumnos de DAW
+    ('14141414M', 'Sofia', 'Rodriguez Martin', 'ESTUDIANTE', 'sofia.rodriguez@sanclemente.net'),
+    ('15151515N', 'Diego', 'Garcia Lopez', 'ESTUDIANTE', 'diego.garcia@sanclemente.net'),
+    ('16161616O', 'Paula', 'Martinez Gomez', 'ESTUDIANTE', 'paula.martinez@sanclemente.net'),
+    ('17171717P', 'Adrian', 'Fernandez Ruiz', 'ESTUDIANTE', 'adrian.fernandez@sanclemente.net'),
+    
+    -- Alumnos de ASIR
+    ('18181818Q', 'Claudia', 'Gonzalez Diaz', 'ESTUDIANTE', 'claudia.gonzalez@sanclemente.net'),
+    ('19191919R', 'Manuel', 'Sanchez Perez', 'ESTUDIANTE', 'manuel.sanchez@sanclemente.net'),
+    ('20202020S', 'Irene', 'Lopez Martin', 'ESTUDIANTE', 'irene.lopez@sanclemente.net'),
+    ('21212121T', 'Ruben', 'Martin Garcia', 'ESTUDIANTE', 'ruben.martin@sanclemente.net'),
+    
+    -- Conserjes adicionales
+    ('23232323V', 'Antonio', 'Conserje Tarde', 'CONSERJE', 'antonio.conserje@sanclemente.net');
+""")
 
             // ==============================================================================
             // DATOS DE PRUEBA MASIVOS (LIBROS DE INFORMATICA) - Total: 30+

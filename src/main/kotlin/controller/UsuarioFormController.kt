@@ -34,8 +34,8 @@ class UsuarioFormController {
         lblTitulo.text = "Editar Usuario"
 
         txtDni.text = usuario.dni
-        txtDni.isDisable = true // bloqueo el dni para que no se pueda cambiar
-        txtNombre.text = usuario.nombre
+        txtDni.isDisable = true
+        txtNombre.text = "${usuario.nombre} ${usuario.apellido}"  // ← Junto nombre y apellido
         txtEmail.text = usuario.email
         cmbTipo.value = usuario.tipo.name
         txtPassword.promptText = "Dejar vacio para mantener la actual"
@@ -69,25 +69,27 @@ class UsuarioFormController {
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
-                val sql = "INSERT INTO usuarios (dni, nombre, tipo, email) VALUES (?,?,?,?)"
+                // Separar nombre y apellido (simple: primera palabra = nombre, resto = apellido)
+                val nombreCompleto = txtNombre.text.trim().split(" ", limit = 2)
+                val nombre = nombreCompleto[0]
+                val apellido = if (nombreCompleto.size > 1) nombreCompleto[1] else ""
+
+                val sql = "INSERT INTO usuarios (dni, nombre, apellido, tipo, email) VALUES (?,?,?,?,?)"
                 val ps = conn.prepareStatement(sql)
                 ps.setString(1, txtDni.text)
-                ps.setString(2, txtNombre.text)
-                ps.setString(3, cmbTipo.value)
-                ps.setString(4, txtEmail.text)
+                ps.setString(2, nombre)
+                ps.setString(3, apellido)
+                ps.setString(4, cmbTipo.value)
+                ps.setString(5, txtEmail.text)
                 ps.executeUpdate()
                 conn.close()
 
-                // si ha llegado aqui es que ha guardado bien, asi que vuelvo a la lista
                 navegarAUsuarios()
 
             } catch (e: Exception) {
-                // AQUI ESTA EL CAMBIO: detecto si el error es por dni duplicado
-                // sqlite devuelve un error que contiene 'UNIQUE constraint failed'
                 if (e.message?.contains("UNIQUE") == true || e.message?.contains("dni") == true) {
                     mostrarAlerta("Usuario Duplicado", "Ya existe un usuario con el DNI ${txtDni.text}", Alert.AlertType.ERROR)
                 } else {
-                    // si es otro error raro, lo muestro tambien
                     mostrarAlerta("Error", "No se pudo guardar: ${e.message}", Alert.AlertType.ERROR)
                 }
                 println(e.message)
@@ -100,16 +102,21 @@ class UsuarioFormController {
         val conn = gestor.getConexion()
         if (conn != null) {
             try {
-                val sql = "UPDATE usuarios SET nombre=?, tipo=?, email=? WHERE id=?"
+                // Separar nombre y apellido
+                val nombreCompleto = txtNombre.text.trim().split(" ", limit = 2)
+                val nombre = nombreCompleto[0]
+                val apellido = if (nombreCompleto.size > 1) nombreCompleto[1] else ""
+
+                val sql = "UPDATE usuarios SET nombre=?, apellido=?, tipo=?, email=? WHERE id=?"
                 val ps = conn.prepareStatement(sql)
-                ps.setString(1, txtNombre.text)
-                ps.setString(2, cmbTipo.value)
-                ps.setString(3, txtEmail.text)
-                ps.setInt(4, usuarioEditar!!.id)
+                ps.setString(1, nombre)
+                ps.setString(2, apellido)
+                ps.setString(3, cmbTipo.value)
+                ps.setString(4, txtEmail.text)
+                ps.setInt(5, usuarioEditar!!.id)
                 ps.executeUpdate()
                 conn.close()
 
-                // todo ok, vuelvo a la lista
                 navegarAUsuarios()
             } catch (e: Exception) {
                 mostrarAlerta("Error", "No se pudo actualizar: ${e.message}", Alert.AlertType.ERROR)

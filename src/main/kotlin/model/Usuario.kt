@@ -11,12 +11,24 @@ data class Usuario(
     val id: Int,
     val dni: String,
     val nombre: String,
-    val tipo: TipoUsuario,        // Campo tipo Enum
+    val apellido: String = "",
+    val tipo: TipoUsuario,
     val email: String,
-    val sancionadoHasta: String?  // Campo de texto o null
+    val fechaNacimiento: String? = null,
+    val genero: String? = null,
+    val telefono: String? = null,
+    val direccionCalle: String? = null,
+    val direccionCiudad: String? = null,
+    val direccionCP: String? = null,
+    val direccionProvincia: String? = null,
+    val sancionadoHasta: String? = null
 ) {
-    // Esto hace que en los desplegables se vea bonito: "Juan (ESTUDIANTE)"
+    // Para mostrar en ComboBox y Tablas
     override fun toString(): String {
-        return "$nombre ($tipo)"
+        return "$nombre $apellido ($tipo)"
     }
+
+    // Nombre completo para mostrar
+    val nombreCompleto: String
+        get() = "$nombre $apellido"
 }

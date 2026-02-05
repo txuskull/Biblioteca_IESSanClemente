@@ -63,7 +63,7 @@ class UsuariosController {
         val colSancion = tabla.columns[4] as TableColumn<Usuario, String>
 
         colDni.cellValueFactory = PropertyValueFactory("dni")
-        colNombre.cellValueFactory = PropertyValueFactory("nombre")
+        colNombre.cellValueFactory = PropertyValueFactory("nombreCompleto")  // ← CAMBIO AQUÍ
         colTipo.cellValueFactory = PropertyValueFactory("tipo")
         colEmail.cellValueFactory = PropertyValueFactory("email")
         colSancion.cellValueFactory = PropertyValueFactory("sancionadoHasta")
@@ -136,7 +136,6 @@ class UsuariosController {
             try {
                 val rs = conn.createStatement().executeQuery("SELECT * FROM usuarios")
                 while (rs.next()) {
-                    // convierto el string de la base de datos a mi enum de kotlin
                     val tipoTexto = rs.getString("tipo")
                     val tipoEnum = try {
                         model.TipoUsuario.valueOf(tipoTexto)
@@ -145,12 +144,20 @@ class UsuariosController {
                     }
 
                     lista.add(model.Usuario(
-                        rs.getInt("id"),
-                        rs.getString("dni"),
-                        rs.getString("nombre"),
-                        tipoEnum,
-                        rs.getString("email") ?: "",
-                        rs.getString("sancionado_hasta")
+                        id = rs.getInt("id"),
+                        dni = rs.getString("dni"),
+                        nombre = rs.getString("nombre"),
+                        apellido = rs.getString("apellido") ?: "",
+                        tipo = tipoEnum,
+                        email = rs.getString("email") ?: "",
+                        fechaNacimiento = rs.getString("fecha_nacimiento"),
+                        genero = rs.getString("genero"),
+                        telefono = rs.getString("telefono"),
+                        direccionCalle = rs.getString("direccion_calle"),
+                        direccionCiudad = rs.getString("direccion_ciudad"),
+                        direccionCP = rs.getString("direccion_cp"),
+                        direccionProvincia = rs.getString("direccion_provincia"),
+                        sancionadoHasta = rs.getString("sancionado_hasta")
                     ))
                 }
                 conn.close()

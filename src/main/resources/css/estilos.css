@@ -2,15 +2,19 @@
    PALETA DE COLORES OFICIAL - IES San Clemente
    ================================================================== */
 /*
-   CABECERAS:  rgba(70, 141, 174, 1)  -> #468DAE (Azul Acero)
-   BOTONES:    rgba(38, 84, 124, 1)   -> #26547C (Azul Oscuro)
-   FONDO:      rgba(239, 239, 239, 1) -> #EFEFEF (Gris Muy Claro)
+   COLORES PRINCIPALES:
+   - Cabecera:       rgba(70, 141, 174, 1)   -> #468DAE (Azul Acero)
+   - Fondo:          rgba(239, 239, 239, 1)  -> #EFEFEF (Gris Muy Claro)
+   - Tarjetas:       rgba(135, 166, 206, 1)  -> #87A6CE (Azul Intermedio)
 
-   BOTONES DE ACCIÓN (Tonos profesionales):
-   - Acción Principal (Nuevo):  rgba(52, 120, 160, 1) -> Azul acero claro
-   - Acción Secundaria (Editar): rgba(38, 84, 124, 1) -> Azul oscuro
-   - Acción Destructiva (Borrar): rgba(140, 75, 75, 1) -> Rojo apagado
-   - Cancelar/Volver:           rgba(120, 120, 120, 1) -> Gris medio
+   COLORES CORPORATIVOS (LOGO IES):
+   - Verde:          rgb(43, 193, 135)       -> #2BC187 (Acciones positivas)
+   - Naranja:        rgb(244, 121, 27)       -> #F4791B (Acciones principales)
+
+   COLORES SECUNDARIOS:
+   - Azul Oscuro:    rgba(38, 84, 124, 1)    -> #26547C (Botones neutrales)
+   - Rojo Peligro:   rgb(211, 47, 47)        -> #D32F2F (Acciones destructivas)
+   - Gris Medio:     rgba(120, 120, 120, 1)  -> #787878 (Cancelar)
 */
 
 /* ==================================================================
@@ -27,15 +31,15 @@
 }
 
 .boton-menu:hover {
-    -fx-background-color: rgba(70, 141, 174, 0.2);
-    -fx-text-fill: #468DAE;
+    -fx-background-color: rgba(244, 121, 27, 0.1);  /* Naranja suave */
+    -fx-text-fill: #F4791B;  /* Naranja corporativo */
     -fx-font-weight: bold;
-    -fx-border-color: #468DAE;
+    -fx-border-color: #F4791B;
     -fx-border-width: 0 0 0 3;
 }
 
 /* ==================================================================
-   2. BOTONES DE ACCIÓN (JERARQUÍA VISUAL)
+   2. BOTONES DE ACCIÓN (JERARQUÍA VISUAL CORPORATIVA)
    ================================================================== */
 
 /* BOTÓN VOLVER EN CABECERA - Blanco sobre fondo azul */
@@ -57,11 +61,9 @@
     -fx-text-fill: white;
 }
 
-/* 1. BOTÓN ACCIÓN PRINCIPAL (Nuevo, Crear)
-   Le damos el azul más oscuro y fuerte (#26547C) para que destaque más.
-*/
+/* BOTÓN ACCIÓN PRINCIPAL (Nuevo, Crear) - NARANJA CORPORATIVO */
 .boton-nuevo {
-    -fx-background-color: rgba(38, 84, 124, 1); /* Azul Oscuro (El de los botones fuertes) */
+    -fx-background-color: rgb(244, 121, 27);  /* Naranja IES */
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -71,16 +73,14 @@
 }
 
 .boton-nuevo:hover {
-    -fx-background-color: rgba(25, 55, 82, 1); /* Aún más oscuro al pasar el ratón */
+    -fx-background-color: rgb(220, 100, 15);  /* Naranja más oscuro */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 1);
 }
 
-/* 2. BOTÓN SECUNDARIO (Editar)
-   Aquí usamos tu AZUL TARJETA (#87A6CE).
-*/
+/* BOTÓN SECUNDARIO (Editar) - AZUL INTERMEDIO */
 .boton-secundario {
-    -fx-background-color: rgba(135, 166, 206, 1); /* Tu Azul Tarjeta */
-    -fx-text-fill: rgba(25, 55, 82, 1); /* Texto oscuro para contraste */
+    -fx-background-color: rgba(135, 166, 206, 1);  /* Azul Tarjeta */
+    -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
     -fx-background-radius: 5;
@@ -88,10 +88,26 @@
 }
 
 .boton-secundario:hover {
-    -fx-background-color: rgba(115, 146, 186, 1); /* Un pelín más oscuro */
-    -fx-text-fill: white; /* Al pasar el ratón, texto blanco para efecto visual */
+    -fx-background-color: rgba(115, 146, 186, 1);  /* Más oscuro */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
 }
-/* BOTÓN CERRAR SESIÓN (mantener aparte para el dashboard) */
+
+/* BOTÓN GUARDAR (Acciones positivas) - VERDE CORPORATIVO */
+.boton-guardar {
+    -fx-background-color: rgb(43, 193, 135);  /* Verde IES */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.boton-guardar:hover {
+    -fx-background-color: rgb(30, 170, 115);  /* Verde más oscuro */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 1);
+}
+
+/* BOTÓN CERRAR SESIÓN - AZUL OSCURO */
 .boton-cerrar {
     -fx-background-color: rgba(38, 84, 124, 1);
     -fx-text-fill: white;
@@ -110,24 +126,9 @@
     -fx-background-color: rgba(25, 55, 82, 1);
 }
 
-/* BOTÓN GUARDAR EN FORMULARIOS - Azul oscuro */
-.boton-guardar {
-    -fx-background-color: rgba(38, 84, 124, 1);
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-background-radius: 5;
-    -fx-cursor: hand;
-}
-
-.boton-guardar:hover {
-    -fx-background-color: rgba(70, 141, 174, 1);
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 8, 0, 0, 1);
-}
-
-/* BOTÓN ELIMINAR (Borrar, Eliminar) - Rojo apagado/marrón */
+/* BOTÓN ELIMINAR (Borrar) - ROJO PELIGRO */
 .boton-eliminar {
-    -fx-background-color: rgba(140, 75, 75, 1);
+    -fx-background-color: rgb(211, 47, 47);  /* Rojo estándar Material Design */
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
@@ -136,7 +137,7 @@
 }
 
 .boton-eliminar:hover {
-    -fx-background-color: rgba(165, 90, 90, 1);
+    -fx-background-color: rgb(183, 28, 28);  /* Rojo más oscuro */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 1);
 }
 
@@ -163,7 +164,6 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0, 0, 1);
 }
 
-/* TODAS LAS TARJETAS - Color intermedio entre cabecera y botón */
 .card-azul {
     -fx-background-color: rgba(135, 166, 206, 1);
 }
@@ -172,7 +172,7 @@
    4. COLORES DE GRÁFICAS
    ================================================================== */
 
-/* FORZAR COLORES DEL PIE CHART */
+/* PieChart */
 .default-color0.chart-pie {
     -fx-pie-color: rgba(70, 141, 174, 1);
 }
@@ -181,7 +181,7 @@
     -fx-pie-color: rgba(38, 84, 124, 1);
 }
 
-/* FORZAR COLORES DE LA LEYENDA DEL PIE CHART */
+/* Leyenda PieChart */
 .chart-legend-item-symbol.default-color0 {
     -fx-background-color: rgba(70, 141, 174, 1);
 }
@@ -190,7 +190,7 @@
     -fx-background-color: rgba(38, 84, 124, 1);
 }
 
-/* FORZAR COLOR DE TODAS LAS BARRAS */
+/* BarChart */
 .chart-bar {
     -fx-bar-fill: rgba(38, 84, 124, 1);
 }
